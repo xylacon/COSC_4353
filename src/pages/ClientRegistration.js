@@ -1,3 +1,5 @@
+import React from 'react'
+
 function ClientRegistration() {
   return (
 	  <div>ClientRegistration</div>
