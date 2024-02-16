@@ -5,7 +5,8 @@ import {
   Login,
   FuelQuote,
   ClientProfile,
-  ClientRegistration
+  ClientRegistration,
+  FuelHistory,
 } from './pages'
 import Menu from './components/Menu'
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/client-profile" element={<ClientProfile />} />
         <Route path="/client-registration" element={<ClientRegistration />} />
         <Route path="/" element={<Login />} />
+        <Route path="/fuel-history" element={<FuelHistory />} />
       </Routes>
     </div>
   )

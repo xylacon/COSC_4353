@@ -12,6 +12,9 @@ function Menu() {
           <NavLink to="/fuel-quote">Fuel Quote</NavLink>
         </li>
         <li>
+          <NavLink to="/fuel-history">Fuel History</NavLink>
+        </li>
+        <li>
           <NavLink to="/client-profile">Client Profile</NavLink>
         </li>
         <li>
