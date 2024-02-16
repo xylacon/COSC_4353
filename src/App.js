@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css'
+import { Routes, Route } from 'react-router-dom'
+import {
+  Login,
+  FuelQuote,
+  ClientProfile,
+  ClientRegistration
+} from './pages'
+import Menu from './components/Menu'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>COSC 4353 App</h1>
+      <Menu />
+      <Routes>
+        <Route path="/fuel-quote" element={<FuelQuote />} />
+        <Route path="/client-profile" element={<ClientProfile />} />
+        <Route path="/client-registration" element={<ClientRegistration />} />
+        <Route path="/" element={<Login />} />
+      </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
