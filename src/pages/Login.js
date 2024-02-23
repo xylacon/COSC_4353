@@ -38,7 +38,7 @@ function Login() {
         <button type="submit">Log In</button>
       </form>
       <p>
-        Don't have an account? <Link to="/client-registration">Sign Up</Link>
+        Don't have an account? <Link to="/client-registration">Register</Link>
       </p>
     </>
   );
