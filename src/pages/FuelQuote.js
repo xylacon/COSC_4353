@@ -17,7 +17,7 @@ function FuelQuote() {
 
   return (
     <>
-      <div>FuelQuote</div>
+      <h1>FuelQuote</h1>
       <form onSubmit={submitFuelQuoteForm}>
         <label>Gallons Requested: </label>
         <input type="number" name="gallons" />

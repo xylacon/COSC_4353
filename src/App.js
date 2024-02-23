@@ -13,7 +13,7 @@ import Menu from './components/Menu'
 function App() {
   return (
     <div className="App">
-      <h1>COSC 4353 App</h1>
+      <h1>Fuel Quote App</h1>
       <Menu />
       <Routes>
         <Route path="/fuel-quote" element={<FuelQuote />} />

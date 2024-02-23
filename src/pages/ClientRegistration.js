@@ -13,7 +13,7 @@ function ClientRegistration() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Sign Up</h2>
+      <h2>Client Registration</h2>
       <div>
         <label>Email: </label>
         <input
