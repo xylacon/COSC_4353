@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import axios from "axios"
+import { FaCheck, FaExclamation } from 'react-icons/fa'
 
 function ClientProfile() {
   const initialFormData = {
@@ -9,7 +11,14 @@ function ClientProfile() {
     state: '',
     zip: ''
   }
+  const initialMessageData = {
+		class: '',
+		text: ''
+	}
+
   const [formData, setFormData] = useState(initialFormData)
+  const [submitting, setSubmitting] = useState(false)
+  const [message, setMessage] = useState(initialMessageData)
 
   const states = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
@@ -26,10 +35,41 @@ function ClientProfile() {
     }))
   }
 
+  async function submitForm(event) {
+    event.preventDefault();
+    setSubmitting(true)
+		await postSubmission()
+		setSubmitting(false)
+  }
+
+  async function postSubmission() {
+    const payload = {
+      ...formData
+    }
+
+    try {
+      const result = await axios.post("http://localhost:3000/ClientProfile", payload)
+      console.log(result)
+      setMessage({
+				class: 'success',
+				text: 'Updated successfully.'
+			})
+    } catch (error) {
+      console.error("FAILED", error)
+      setMessage({
+				class: 'failed',
+				text: 'Updated failed. Please try again.'
+			})
+    }
+  }
+
   return (
-	  <div className="ClientProfile">
+	  <main className="ClientProfile">
       <h1>Client Profile</h1>
-      <form>
+      <section>
+        Message
+      </section>
+      <form onSubmit={submitForm}>
         <div className="item">
           <label htmlFor="name">Name</label>
           <input
@@ -100,9 +140,16 @@ function ClientProfile() {
             value={formData.zip}
           />
         </div>
-        <button>Save</button>
+        <button disabled={submitting}>
+          {submitting ? 'Updating...' : 'Update'}
+        </button>
+        {message.class.length > 0 &&
+          <div className={`message ${message.class}`}>
+            {message.class === 'failed' ? <FaExclamation /> : <FaCheck />}<div>{message.text}</div>
+          </div>
+        }
       </form>
-    </div>
+    </main>
   )
 }
 
