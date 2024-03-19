@@ -12,17 +12,18 @@ function FuelQuote() {
   // event handler for form submission
   const submitFuelQuoteForm = (e) => {
     e.preventDefault();
-    const newQuotePrice = (e.target.elements.gallons.value * suggestedPrice).toFixed(2);
-    setTotalPrice(newQuotePrice);
+
+    const userData = {
+      gallonsRequested: e.target.gallons.value,
+      deliveryAddress: "asdf",
+      deliveryDate: "12/2/22",
+      suggestedPrice: suggestedPrice,
+    }
 
     // api request for fuel quote form
-    axios.get('http://localhost:3000/fuelquote', {
-      params: {
-        key1: 'value1',
-        key2: 'value2',
-      },
-    }).then(response => {
+    axios.post('http://localhost:3000/fuelquote', userData).then(response => {
       console.log(response.data);
+      setTotalPrice(response.data);
     }).catch(error => {
       console.error('Error fetching data:', error);
     })
