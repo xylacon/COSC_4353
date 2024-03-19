@@ -10,7 +10,8 @@ import {
   FuelHistory,
 } from './pages'
 import {
-  Header
+  Header,
+  Footer
 } from './components'
 
 import './css/App.css'
@@ -45,6 +46,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/fuel-history" element={<FuelHistory />} />
       </Routes>
+      <Footer />
     </div>
   )
 }

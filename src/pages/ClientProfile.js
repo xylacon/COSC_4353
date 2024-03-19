@@ -24,7 +24,7 @@ function ClientProfile() {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
   ]
   const stateOptions = states.map(state => {
-    return <option value={state}>{state}</option>
+    return <option value={state}>{state}</option> // FIX ME: EACH NEEDS UNIQUE KEY
   })
 
   function onChange(event) {
@@ -48,7 +48,7 @@ function ClientProfile() {
     }
 
     try {
-      const result = await axios.post("http://localhost:3000/ClientProfile", payload)
+      const result = await axios.post(".../backend/server.js", payload)
       console.log(result)
       setMessage({
 				class: 'success',

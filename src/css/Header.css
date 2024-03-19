@@ -121,7 +121,7 @@
 }
 /* end Navigation */
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 600px) {
 	.header-container {
 		justify-content: center;
 	}
