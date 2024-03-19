@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 
 function Login() {
   //hooks
@@ -24,7 +24,7 @@ function Login() {
   };
 
   return (
-    <>
+    <main className="Login">
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
         <div>
@@ -49,9 +49,9 @@ function Login() {
         <button type="submit">Log In</button>
       </form>
       <p>
-        Don't have an account? <Link to="/client-registration">Register</Link>
+        Don't have an account? <NavLink className={"ext-link"} to="/client-registration">Register</NavLink>
       </p>
-    </>
+    </main>
   );
 }
 

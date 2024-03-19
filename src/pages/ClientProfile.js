@@ -66,9 +66,6 @@ function ClientProfile() {
   return (
 	  <main className="ClientProfile">
       <h1>Client Profile</h1>
-      <section>
-        Message
-      </section>
       <form onSubmit={submitForm}>
         <div className="item">
           <label htmlFor="name">Name</label>

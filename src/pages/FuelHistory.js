@@ -1,6 +1,6 @@
+import React from 'react'
+import '../css/FuelHistory.css'
 
-import React from 'react';
-import '../css/FuelHistory.css';
 function FuelHistory() {
   const prepopulatedHistory = [
     {
@@ -21,7 +21,7 @@ function FuelHistory() {
   ]
 
   return (
-    <>
+    <main className='FuelHistory'>
       <h1>Fuel History</h1>
       <table>
         <thead>
@@ -41,8 +41,8 @@ function FuelHistory() {
           ))}
         </tbody>
       </table>
-    </>
+    </main>
   )
 }
 
-export default FuelHistory;
+export default FuelHistory

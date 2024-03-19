@@ -30,7 +30,7 @@ function FuelQuote() {
   }
 
   return (
-    <>
+    <main className='FuelQuote'>
       <h1>FuelQuote</h1>
       <form onSubmit={submitFuelQuoteForm}>
         <label>Gallons Requested: </label>
@@ -48,7 +48,7 @@ function FuelQuote() {
         <button type="submit">Submit</button>
       </form>
       <h4>Total price: {(totalPrice === 0) ? "N/A" : `$${totalPrice}`}</h4>
-    </>
+    </main>
   )
 }
 

@@ -21,17 +21,6 @@
 	align-items: center;
 }
 
-#header-title {
-	order: 1;
-
-	user-select: none;
-	-webkit-user-select: none;
-
-	font-size: 1.8em;
-	font-family: 'Lora', serif;
-	font-weight: 500;
-}
-
 .scroll-shadow {
 	box-shadow: 0 0 7px var(--shadow);
 }
