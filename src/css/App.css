@@ -1,18 +1,61 @@
+html[data-theme="light"] {
+  	--black: #000000;
+	--gray-1: #8E8E93;
+	--gray-2: #AEAEB2;
+	--gray-3: #C7C7CC;
+	--gray-4: #D1D1D6;
+	--gray-5: #E5E5EA;
+	--gray-6: #F2F2F7;
+	--white: #FFFFFF;
+
+  	--red: #ff3b30;
+	--orange: #FF9500;
+	--yellow: #FFCC00;
+	--green: #34C759;
+	--mint: #00C7BE;
+	--teal: #30b0c7;
+	--cyan: #32ADE6;
+	--blue: #007AFF;
+	--indigo: #5856D6;
+	--purple: #AF52DE;
+	--pink: #FF2D55;
+	--brown: #A2845E;
+
+  	--bg-primary: var(--white);
+	--bg-secondary: var(--gray-6);
+	--bg-tertiary: var(--gray-5);
+
+	--bg-header-color: 48, 176, 199;
+
+    --txt-primary: var(--black);
+    --txt-secondary: var(--gray-1);
+}
+
+:root {
+	--bg-header: rgba(var(--bg-header-color), 0.9);
+	--bg-menu: rgba(var(--bg-secondary), 0.5);
+
+	--border-menu: var(--bg-primary);
+
+	--shadow: rgba(0, 0, 0, 0.7);
+	--hover: 0.7;
+
+	--margin: 25px;
+
+	--margin: 25px;
+	--header-height: 65px;
+	--max-width: 1200px;
+
+	--trans-fast: 200ms;
+}
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-}
-
-.Menu ul {
-  display: flex;
-	justify-content: center;
-	align-items: center;
-  gap: 25px;
-
-  list-style-type: none;
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-primary);
 }

@@ -1,0 +1,186 @@
+/* Header */
+.header {
+	z-index: 2;
+	position: sticky;
+	top: 0;
+	height: var(--header-height);
+	padding: 0 var(--margin);
+	margin-bottom: var(--margin);
+
+	background-color: var(--bg-header);
+	transition: box-shadow var(--trans-fast);
+}
+.header-container {
+	width: 100%;
+	max-width: var(--max-width);
+	height: 100%;
+	margin: auto;
+	
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#header-title {
+	order: 1;
+
+	user-select: none;
+	-webkit-user-select: none;
+
+	font-size: 1.8em;
+	font-family: 'Lora', serif;
+	font-weight: 500;
+}
+
+.scroll-shadow {
+	box-shadow: 0 0 7px var(--shadow);
+}
+/* end Header */
+
+.menu {
+	order: 2;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Hamburger */
+#menu-toggle {
+	display: none;
+}
+.menu-button-container {
+  z-index: 1;
+	position: absolute;
+	left: var(--margin);
+	visibility: hidden;
+	width: 32px;
+	height: 19px;
+  cursor: pointer;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.menu-button-top,
+.menu-button-middle,
+.menu-button-bottom {
+	display: block;
+  position: absolute;
+  height: 2px;
+  width: 30px;
+
+	border: 1px solid var(--border-menu);
+	border-radius: 100px;
+
+  transition:
+		opacity var(--trans-fast),
+		border-width var(--trans-fast),
+		border-radius var(--trans-fast),
+		height var(--trans-fast),
+		width var(--trans-fast);
+}
+.menu-button-top {
+	margin-top: -15px;
+	border-width: 2px;
+	border-bottom: none;
+}
+.menu-button-bottom {
+	margin-top: 15px;
+	border-width: 2px;
+	border-top: none;
+}
+.menu-button-container:hover .menu-button-top,
+.menu-button-container:hover .menu-button-middle,
+.menu-button-container:hover .menu-button-bottom {
+	opacity: var(--hover);
+}
+#menu-toggle:checked + .menu-button-container .menu-button-top {
+	height: 15px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+#menu-toggle:checked + .menu-button-container .menu-button-middle {
+	width: 15px;
+}
+#menu-toggle:checked + .menu-button-container .menu-button-bottom {
+	height: 15px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+/* end Hamburger */
+
+/* Navigation */
+.menu-items {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--margin);
+
+	list-style-type: none;
+	font-size: 1.1em;
+}
+.menu-items li {
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.active {
+	font-weight: 600;
+}
+/* end Navigation */
+
+@media screen and (max-width: 900px) {
+	.header-container {
+		justify-content: center;
+	}
+
+	/* Fixes menu keeping width in Safari */
+	.menu {
+		width: 0;
+	}
+
+	.menu-button-container {
+		visibility: visible;
+	}
+
+	.menu-items {
+		position: fixed;
+		top: 0;
+		left: calc(-1 * var(--hamburger-width));
+		height: 100vh;
+		width: 100vw;
+		padding: var(--margin);
+		padding-top: var(--header-height);
+		overflow: hidden;
+	
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		gap: 0;
+	
+		font-size: 1.4em;
+		background: var(--bg-menu);
+		backdrop-filter: blur(20px) contrast(80%);
+		transition: transform var(--trans-fast);
+	}
+	#menu-toggle:checked ~ .menu-items {
+		transform: translate3d(var(--hamburger-width), 0, 0);
+	}
+
+	.menu-items li {
+		width: 100%;
+		display: flex;
+		white-space: nowrap;
+	}
+	.menu-items li:not(:last-child) {
+		border-bottom: 1px solid var(--border-menu);
+	}
+
+	.menu-items li a {
+		width: 100%;
+		padding: 10px 0;
+	}
+}
