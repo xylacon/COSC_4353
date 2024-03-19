@@ -37,7 +37,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <h1>COSC 4353 App</h1>
+      <Menu />
       <Routes>
         <Route path="/fuel-quote" element={<FuelQuote />} />
         <Route path="/client-profile" element={<ClientProfile />} />
