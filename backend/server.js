@@ -17,10 +17,40 @@ const users = [
     name: "John Doe",
   },
 ];
+
+// API for client registration
+
+app.post("/client-registration", (req, res) => {
+  const { email, password } = req.body;
+
+  // Validate password length
+  if (password.length < 8) {
+    return res.status(401).send("Password must be at least 8 characters long");
+  }
+
+  console.log(req.body);
+
+  const user = users.find((user) => user.email === email);
+
+  if (!user) {
+    return res
+      .status(200)
+      .send("USER WILL BE ADDED TO THE DATABASE, REGISTERATION SUCCESS");
+  }
+
+  res
+    .status(401)
+    .send("FAILURE, account already exists. Please log in instead");
+});
 //API for login endpoint
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+  // Validate password length
+  if (password.length < 8) {
+    return res.status(401).send("Password must be at least 8 characters long");
+  }
+
   console.log(req.body);
 
   //verify user from example data

@@ -1,15 +1,29 @@
-import React, { useState } from "react"
+import axios from "axios";
+import React, { useState } from "react";
 
 function ClientRegistration() {
   //hooks
-  const [email, setEmail] = useState("")
-  const [password, setPass] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPass] = useState("");
 
   //handler
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Signing up with:", { email, password })
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/client-registration",
+        {
+          email,
+          password,
+        }
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Registration FAILED", error);
+    }
+  };
 
   return (
     <main className="ClientRegistration">
@@ -37,7 +51,7 @@ function ClientRegistration() {
         <button type="submit">Sign Up</button>
       </form>
     </main>
-  )
+  );
 }
 
-export default ClientRegistration
+export default ClientRegistration;
