@@ -68,7 +68,18 @@ app.post("/login", (req, res) => {
   res.status(200).send("SUCCESS");
 });
 
-// Api for fuel quote
+// Api for fuel quote get
+app.get("/fuelquote", (req, res) => {
+  //hardcoded values
+  const hardcodedValues = {
+    deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
+    suggestedPrice: "3.14",
+  }
+
+  res.status(200).send(hardcodedValues);
+})
+
+// Api for fuel quote post
 app.post("/fuelquote", (req, res) => {
   console.log(req.body);
   const data = req.body;
@@ -110,21 +121,21 @@ app.get("/fuelhistory", (req, res) => {
       deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
       deliveryDate: "2/28/24",
       suggestedPrice: 3.14,
-      totalPrice: 60,
+      totalPrice: 62.8,
     },
     {
-      gallonsRequested: 20,
+      gallonsRequested: 15,
       deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
       deliveryDate: "3/18/24",
       suggestedPrice: 3.14,
-      totalPrice: 60,
+      totalPrice: 47.1,
     },
     {
-      gallonsRequested: 20,
+      gallonsRequested: 42,
       deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
       deliveryDate: "4/2/24",
       suggestedPrice: 3.14,
-      totalPrice: 60,
+      totalPrice: 131.88,
     },
   ];
 

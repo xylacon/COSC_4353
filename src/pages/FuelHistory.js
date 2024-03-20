@@ -1,24 +1,28 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
 import '../css/FuelHistory.css'
 
 function FuelHistory() {
-  const prepopulatedHistory = [
-    {
-      date: "2021-01-01",
-      gallons: 100,
-      price: 260
-    },
-    {
-      date: "2022-11-18",
-      gallons: 100,
-      price: 255
-    },
-    {
-      date: "2023-04-20",
-      gallons: 69,
-      price: 420
+
+  const [prepopulatedHistory, setPrepopulatedHistory] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/fuelhistory');
+        setPrepopulatedHistory(response.data);
+      }
+      catch (error) {
+        console.error(error);
+      }
     }
-  ]
+
+    fetchData();
+  }, [])
+
+  if(!prepopulatedHistory){
+    return (<div>Loading...</div>);
+  }
 
   return (
     <main className='FuelHistory'>
@@ -26,17 +30,21 @@ function FuelHistory() {
       <table>
         <thead>
           <tr>
-            <th>Date</th>
             <th>Gallons</th>
-            <th>Price</th>
+            <th>Address</th>
+            <th>Date</th>
+            <th>Price per gallon</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
           {prepopulatedHistory.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.date}</td>
-              <td>{entry.gallons}</td>
-              <td>{entry.price}</td>
+              <td>{entry.gallonsRequested}</td>
+              <td>{entry.deliveryAddress}</td>
+              <td>{entry.deliveryDate}</td>
+              <td>{entry.suggestedPrice}</td>
+              <td>{entry.totalPrice}</td>
             </tr>
           ))}
         </tbody>
