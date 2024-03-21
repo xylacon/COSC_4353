@@ -1,6 +1,6 @@
 // login.test.js
 const request = require("supertest");
-const app = require("../app"); // Assuming your Express app instance is exported from app.js
+const app = require("../app");
 
 describe("POST /login", () => {
   it("should return 401 if password length is less than 8 characters", async () => {
