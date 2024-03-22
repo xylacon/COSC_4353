@@ -94,14 +94,21 @@ app.post("/fuelquote", (req, res) => {
     res.status(400).send("delivery address is empty or invalid");
   }
 
+  
   // validate delivery date is not empty
   if (data.deliveryDate.length === 0 || data.deliveryDate === null) {
-    res.status(400).send("delivery address is empty or invalid");
+    res.status(400).send("delivery date is empty or invalid");
+  }
+  
+  // validate delivery date is valid
+  const regex = /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+  if(!regex.test(data.deliveryDate)) {
+    res.status(400).send('invalid date format, date is not in yyyy-mm-dd form');
   }
 
   // validate suggested price per gallon is numeric
   if (isNaN(data.suggestedPrice)) {
-    res.status(400).send("error suggested price not a number");
+    res.status(400).send("error suggested price is not a number");
   }
 
   // Calculate cost
