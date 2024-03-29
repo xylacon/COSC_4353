@@ -142,4 +142,23 @@ app.get("/fuelhistory", (req, res) => {
   res.status(200).send(fuelQuoteHistory);
 });
 
+// API for Client Profile
+app.get("/client-profile", (req, res) => {
+  // Return hard-coded values for client
+  const clientProfile = {
+    name: 'John Doe',
+    address1: '123 Main St',
+    address2: '',
+    city: 'Houston',
+    state: 'TX',
+    zip: '77006'
+  };
+
+  res.status(200).send(clientProfile);
+});
+
+app.post("/client-profile", (req, res) => {
+  
+});
+
 module.exports = app;
