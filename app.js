@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const db = require("./db"); // Import the database connection
 const app = express();
 
 app.use(cors());
@@ -94,16 +95,15 @@ app.post("/fuelquote", (req, res) => {
     res.status(400).send("delivery address is empty or invalid");
   }
 
-  
   // validate delivery date is not empty
   if (data.deliveryDate.length === 0 || data.deliveryDate === null) {
     res.status(400).send("delivery date is empty or invalid");
   }
-  
+
   // validate delivery date is valid
   const regex = /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-  if(!regex.test(data.deliveryDate)) {
-    res.status(400).send('invalid date format, date is not in yyyy-mm-dd form');
+  if (!regex.test(data.deliveryDate)) {
+    res.status(400).send("invalid date format, date is not in yyyy-mm-dd form");
   }
 
   // validate suggested price per gallon is numeric
@@ -153,19 +153,17 @@ app.get("/fuelhistory", (req, res) => {
 app.get("/client-profile", (req, res) => {
   // Return hard-coded values for client
   const clientProfile = {
-    name: 'John Doe',
-    address1: '123 Main St',
-    address2: '',
-    city: 'Houston',
-    state: 'TX',
-    zip: '77006'
+    name: "John Doe",
+    address1: "123 Main St",
+    address2: "",
+    city: "Houston",
+    state: "TX",
+    zip: "77006",
   };
 
   res.status(200).send(clientProfile);
 });
 
-app.post("/client-profile", (req, res) => {
-  
-});
+app.post("/client-profile", (req, res) => {});
 
 module.exports = app;
