@@ -122,6 +122,7 @@ app.post("/fuelquote", (req, res) => {
 // Api for fuel history
 app.get("/fuelhistory", (req, res) => {
   // return hardcoded values of fuel quotes
+
   const fuelQuoteHistory = [
     {
       gallonsRequested: 20,
@@ -146,7 +147,31 @@ app.get("/fuelhistory", (req, res) => {
     },
   ];
 
-  res.status(200).send(fuelQuoteHistory);
+  db.query(
+    `SELECT CI.*, Q.*
+    FROM (
+        SELECT *
+        FROM ClientInformation
+        WHERE ClientInformationID = 2
+    ) AS CI
+    LEFT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID
+
+    UNION
+
+    SELECT CI.*, Q.*
+    FROM (
+        SELECT *
+        FROM ClientInformation
+        WHERE ClientInformationID = 2
+    ) AS CI
+    RIGHT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID;
+    `,
+    function (error, results, fields) {
+    if (error) throw error;
+    res.send(results);
+  });
+
+  //res.status(200).send(fuelQuoteHistory);
 });
 
 // API for Client Profile

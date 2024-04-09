@@ -10,6 +10,7 @@ function FuelHistory() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/fuelhistory');
+        console.log(response.data);
         setPrepopulatedHistory(response.data);
       }
       catch (error) {
@@ -40,11 +41,11 @@ function FuelHistory() {
         <tbody>
           {prepopulatedHistory.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.gallonsRequested}</td>
-              <td>{entry.deliveryAddress}</td>
-              <td>{entry.deliveryDate}</td>
-              <td>{entry.suggestedPrice}</td>
-              <td>{entry.totalPrice}</td>
+              <td>{entry.GallonsRequested}</td>
+              <td>{entry.Address1}</td>
+              <td>{entry.DeliveryDate}</td>
+              <td>{entry.SuggestedPrice}</td>
+              <td>{(entry.SuggestedPrice * entry.GallonsRequested)}</td>
             </tr>
           ))}
         </tbody>
