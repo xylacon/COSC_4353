@@ -1,7 +1,31 @@
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const express = require("express");
+const session = require("express-session");
 const cors = require("cors");
 const db = require("./db"); // Import the database connection
 const app = express();
+
+const generateSecretKey = () => {
+  return crypto.randomBytes(32).toString("hex");
+};
+
+function generateRandomClientId() {
+  const min = 1000000; // Minimum 7-digit number (inclusive)
+  const max = 9999999; // Maximum 7-digit number (inclusive)
+  const clientId = Math.floor(Math.random() * (max - min + 1)) + min;
+  return clientId;
+}
+
+// Configure express-session middleware
+app.use(
+  session({
+    secret: generateSecretKey(), // Change this to a secure random key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set secure to true in production with HTTPS
+  })
+);
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +45,7 @@ const users = [
 
 // API for client registration
 
-app.post("/client-registration", (req, res) => {
+app.post("/client-registration", async (req, res) => {
   const { email, password } = req.body;
 
   // Validate password length
@@ -31,17 +55,48 @@ app.post("/client-registration", (req, res) => {
 
   console.log(req.body);
 
-  const user = users.find((user) => user.email === email);
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
 
-  if (!user) {
-    return res
-      .status(200)
-      .send("USER WILL BE ADDED TO THE DATABASE, REGISTERATION SUCCESS");
-  }
+  // Insert into your database (assuming you have a UserCredentials table)
+  const newUser = {
+    email: email,
+    password: hashedPassword,
+    UserCredentialsID: generateRandomClientId(), // Assuming you have a function to generate random client IDs
+  };
 
-  res
-    .status(401)
-    .send("FAILURE, account already exists. Please log in instead");
+  // Check if the user with the same email already exists
+  const checkQuery = `SELECT * FROM UserCredentials WHERE Username = ?`;
+  db.query(checkQuery, [newUser.email], (err, result) => {
+    if (err) {
+      console.error("Error checking user existence:", err);
+      return res.status(500).send("Error checking user existence");
+    }
+
+    if (result.length > 0) {
+      // User with the same email already exists
+      console.error("User with this email already exists");
+      return res
+        .status(400)
+        .send("User with this email already exists, Please login instead!");
+    }
+
+    // User does not exist, proceed with insertion
+    const insertQuery = `INSERT INTO UserCredentials (Username, Password, UserCredentialsID) VALUES (?, ?, ?)`;
+    db.query(
+      insertQuery,
+      [newUser.email, newUser.password, newUser.UserCredentialsID],
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting user:", err);
+          return res.status(500).send("Error inserting user data!");
+        }
+        console.log("User inserted into database!");
+        req.session.UserCredentialsID = newUser.UserCredentialsID;
+        res.status(200).send("Resgistration Successful!");
+      }
+    );
+  });
 });
 //API for login endpoint
 
@@ -54,19 +109,23 @@ app.post("/login", (req, res) => {
 
   console.log(req.body);
 
-  //verify user from example data
-  const user = users.find((user) => user.email === email);
-
-  if (!user) {
-    return res.status(401).send("User not found");
-  }
-
-  // Check password
-  if (user.password !== password) {
-    return res.status(401).send("INCORRECT PASSWORD");
-  }
-
-  res.status(200).send("SUCCESS");
+  const selectQuery = `SELECT * FROM UserCredentials WHERE Username = ?`;
+  db.query(selectQuery, [email], async (err, result) => {
+    if (err) {
+      console.error("Error retrieving user:", err);
+      return res.status(500).send("Error retrieving user data");
+    }
+    if (result.length === 0) {
+      return res.status(401).send("User does not exist!");
+    }
+    const foundUser = result[0];
+    const isMatch = await bcrypt.compare(password, foundUser.Password);
+    if (!isMatch) {
+      return res.status(401).send("Incorrect password, Please try again!");
+    }
+    req.session.UserCredentialsID = foundUser.UserCredentialsID;
+    res.status(200).send("SUCCESS");
+  });
 });
 
 // Api for fuel quote get
@@ -167,9 +226,10 @@ app.get("/fuelhistory", (req, res) => {
     RIGHT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID;
     `,
     function (error, results, fields) {
-    if (error) throw error;
-    res.send(results);
-  });
+      if (error) throw error;
+      res.send(results);
+    }
+  );
 
   //res.status(200).send(fuelQuoteHistory);
 });
