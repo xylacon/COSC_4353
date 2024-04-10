@@ -175,36 +175,51 @@ app.post("/fuelquote", (req, res) => {
     2
   );
 
+  
+  /*
+  db.query(
+    `
+    SELECT *
+    FROM ClientInformation
+    WHERE UserCredentialsID = ${req.session.UserCredentialsID}
+    `, (err, results) => {
+      if (err){
+        throw err;
+      }
+    
+      const clientInformationID = results.ClientInformationID;
+      
+      db.query(
+        `
+        INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
+        VALUES(${clientInformationID}, ${data.gallonsRequested}, ${data.deliveryDate}, ${data.suggestedPrice});
+        `
+      ), (err) => {
+        if (err) {
+          throw err;
+        }
+      }
+
+    }
+  )
+  */
+
+  db.query(
+    `
+    INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
+    VALUES(2, ${data.gallonsRequested}, '${data.deliveryDate}', ${data.suggestedPrice});
+    `
+  ), (err) => {
+    if (err) {
+      throw err;
+    }
+  }
+
   res.status(200).send(newQuotePrice);
 });
 
 // Api for fuel history
 app.get("/fuelhistory", (req, res) => {
-  // return hardcoded values of fuel quotes
-
-  const fuelQuoteHistory = [
-    {
-      gallonsRequested: 20,
-      deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
-      deliveryDate: "2/28/24",
-      suggestedPrice: 3.14,
-      totalPrice: 62.8,
-    },
-    {
-      gallonsRequested: 15,
-      deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
-      deliveryDate: "3/18/24",
-      suggestedPrice: 3.14,
-      totalPrice: 47.1,
-    },
-    {
-      gallonsRequested: 42,
-      deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
-      deliveryDate: "4/2/24",
-      suggestedPrice: 3.14,
-      totalPrice: 131.88,
-    },
-  ];
 
   db.query(
     `SELECT CI.*, Q.*
@@ -225,7 +240,7 @@ app.get("/fuelhistory", (req, res) => {
     ) AS CI
     RIGHT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID;
     `,
-    function (error, results, fields) {
+    function (error, results) {
       if (error) throw error;
       res.send(results);
     }
