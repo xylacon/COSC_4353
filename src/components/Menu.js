@@ -69,26 +69,26 @@ function Menu() {
         <div className="menu-button-bottom"></div>
       </label>
       <ul className="menu-items">
-        {cookies.isLoggedIn ? (
-          <ul className="menu-items">
-            <li onClick={handleClick}>
-              <NavLink to="/client-profile">Client Profile</NavLink>
-            </li>
-            <li onClick={handleClick}>
-              <NavLink to="/fuel-quote">Fuel Quote</NavLink>
-            </li>
-            <li onClick={handleClick}>
-              <NavLink to="/fuel-history">Fuel History</NavLink>
-            </li>
-            <li onClick={logOut}>Log out</li>
-          </ul>
-        ) : (
-          <ul className="menu-items">
-            <li onClick={handleClick}>
-              <NavLink to="/login">Login</NavLink>
-            </li>
-          </ul>
-        )}
+				{cookies.isLoggedIn ? (
+					<ul className="menu-items">
+						<li onClick={handleClick}>
+							<NavLink to="/client-profile">Client Profile</NavLink>
+						</li>
+						<li onClick={handleClick}>
+							<NavLink to="/fuel-quote">Fuel Quote</NavLink>
+						</li>
+						<li onClick={handleClick}>
+							<NavLink to="/fuel-history">Fuel History</NavLink>
+						</li>
+						<li onClick={logOut}>Log Out</li>
+					</ul>
+				) : (
+					<ul className="menu-items">
+						<li onClick={handleClick}>
+							<NavLink to="/login">Log In</NavLink>
+						</li>
+					</ul>
+				)}
       </ul>
     </div>
   );

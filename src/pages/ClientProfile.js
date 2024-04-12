@@ -8,7 +8,7 @@ function ClientProfile() {
     address1: '',
     address2: '',
     city: '',
-    state: '',
+    state: 'AL',
     zip: ''
   }
   const initialMessageData = {
