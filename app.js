@@ -11,8 +11,8 @@ const generateSecretKey = () => {
 };
 
 function generateRandomClientId() {
-  const min = 1000000; // Minimum 7-digit number (inclusive)
-  const max = 9999999; // Maximum 7-digit number (inclusive)
+  const min = 1000000;
+  const max = 9999999;
   const clientId = Math.floor(Math.random() * (max - min + 1)) + min;
   return clientId;
 }
@@ -20,10 +20,10 @@ function generateRandomClientId() {
 // Configure express-session middleware
 app.use(
   session({
-    secret: generateSecretKey(), // Change this to a secure random key
+    secret: generateSecretKey(),
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set secure to true in production with HTTPS
+    cookie: { secure: false },
   })
 );
 
@@ -58,14 +58,11 @@ app.post("/client-registration", async (req, res) => {
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
 
-  // Insert into your database (assuming you have a UserCredentials table)
   const newUser = {
     email: email,
     password: hashedPassword,
     UserCredentialsID: generateRandomClientId(),
     ClientInformationID: generateRandomClientId(),
-
-    // Assuming you have a function to generate random client IDs
   };
 
   // Check if the user with the same email already exists
@@ -281,7 +278,8 @@ app.get("/client-profile", (req, res) => {
 
 app.post("/client-profile", (req, res) => {
   console.log(req.body);
-  const { clientId, name, address1, address2, city, state, zip } = req.body;
+  clientId = req.session.ClientInformationID;
+  const { name, address1, address2, city, state, zip } = req.body;
 
   if (name.length < 1 || name.length > 50) {
     console.error("Name cannot exceed 50 characters.");
@@ -307,14 +305,14 @@ app.post("/client-profile", (req, res) => {
     console.error("State must be specified.");
     return res.status(401).send("State must be 2 characters.");
   }
-  if (zip < 5 || zip > 9) {
+  if (zip.length < 5 || zip.length > 9) {
     console.error("Zip must be between 5 and 9 characters.");
     return res.status(401).send("Zip must be between 5-9 numbers.");
   }
 
   const updateQuery = `
     UPDATE ClientInformation
-    SET Name = ${name}, Address1 = ${address1}, Address2 = ${address2}, City = ${city}, State = ${state}, Zip = ${zip}
+    SET Name = '${name}', Address1 = '${address1}', Address2 = '${address2}', City = '${city}', State = '${state}', Zip = '${zip}'
     WHERE ClientInformationId = ${clientId}
   `;
   db.query(updateQuery, (err, result) => {
