@@ -62,7 +62,10 @@ app.post("/client-registration", async (req, res) => {
   const newUser = {
     email: email,
     password: hashedPassword,
-    UserCredentialsID: generateRandomClientId(), // Assuming you have a function to generate random client IDs
+    UserCredentialsID: generateRandomClientId(),
+    ClientInformationID: generateRandomClientId(),
+
+    // Assuming you have a function to generate random client IDs
   };
 
   // Check if the user with the same email already exists
@@ -83,6 +86,7 @@ app.post("/client-registration", async (req, res) => {
 
     // User does not exist, proceed with insertion
     const insertQuery = `INSERT INTO UserCredentials (Username, Password, UserCredentialsID) VALUES (?, ?, ?)`;
+    const insertQuery2 = `INSERT INTO ClientInformation (ClientInformationID, UserCredentialsID) VALUES (?, ?)`;
     db.query(
       insertQuery,
       [newUser.email, newUser.password, newUser.UserCredentialsID],
@@ -91,9 +95,20 @@ app.post("/client-registration", async (req, res) => {
           console.error("Error inserting user:", err);
           return res.status(500).send("Error inserting user data!");
         }
-        console.log("User inserted into database!");
-        req.session.UserCredentialsID = newUser.UserCredentialsID;
-        res.status(200).send("Resgistration Successful!");
+
+        db.query(
+          insertQuery2,
+          [newUser.ClientInformationID, newUser.UserCredentialsID],
+          (err, result) => {
+            if (err) {
+              console.error("Error inserting user:", err);
+              return res.status(500).send("Error inserting user data!");
+            }
+            console.log("User inserted into database!");
+            req.session.ClientInformationID = newUser.ClientInformationID;
+            res.status(200).send("Resgistration Successful!");
+          }
+        );
       }
     );
   });
@@ -175,7 +190,6 @@ app.post("/fuelquote", (req, res) => {
     2
   );
 
-  
   /*
   db.query(
     `
@@ -209,18 +223,18 @@ app.post("/fuelquote", (req, res) => {
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
     VALUES(2, ${data.gallonsRequested}, '${data.deliveryDate}', ${data.suggestedPrice});
     `
-  ), (err) => {
-    if (err) {
-      throw err;
-    }
-  }
+  ),
+    (err) => {
+      if (err) {
+        throw err;
+      }
+    };
 
   res.status(200).send(newQuotePrice);
 });
 
 // Api for fuel history
 app.get("/fuelhistory", (req, res) => {
-
   db.query(
     `SELECT CI.*, Q.*
     FROM (
@@ -275,11 +289,15 @@ app.post("/client-profile", (req, res) => {
   }
   if (address1.length < 1 || address1.length > 100) {
     console.error("Address 1 must be between 1 and 100 characters.");
-    return res.status(401).send("Address 1 must be between 1 and 100 characters.");
+    return res
+      .status(401)
+      .send("Address 1 must be between 1 and 100 characters.");
   }
   if (address2.length > 100) {
     console.error("Address 2 must be between 1 and 100 characters.");
-    return res.status(401).send("Address 2 must be between 1 and 100 characters.");
+    return res
+      .status(401)
+      .send("Address 2 must be between 1 and 100 characters.");
   }
   if (city.length < 1 || city.length > 100) {
     console.error("City must be between 1 and 100 characters.");
@@ -299,15 +317,13 @@ app.post("/client-profile", (req, res) => {
     SET Name = ${name}, Address1 = ${address1}, Address2 = ${address2}, City = ${city}, State = ${state}, Zip = ${zip}
     WHERE ClientInformationId = ${clientId}
   `;
-  db.query(
-    updateQuery, (err, result) => {
-      if (err) {
-        console.error("Error updating information: ", err);
-        return res.status(500).send("Error updating information.");
-      }
-      console.log("Client information updated in database.");
+  db.query(updateQuery, (err, result) => {
+    if (err) {
+      console.error("Error updating information: ", err);
+      return res.status(500).send("Error updating information.");
     }
-  )
+    console.log("Client information updated in database.");
+  });
 });
 
 module.exports = app;
