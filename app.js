@@ -278,7 +278,8 @@ app.get("/client-profile", (req, res) => {
 
 app.post("/client-profile", (req, res) => {
   console.log(req.body);
-  const { clientId, name, address1, address2, city, state, zip } = req.body;
+  clientId = req.session.ClientInformationID;
+  const { name, address1, address2, city, state, zip } = req.body;
 
   if (name.length < 1 || name.length > 50) {
     console.error("Name must be between 1 and 50 characters.");
@@ -304,14 +305,14 @@ app.post("/client-profile", (req, res) => {
     console.error("State must be 2 characters.");
     return res.status(401).send("State must be 2 characters.");
   }
-  if (zip < 5 || zip > 9) {
+  if (zip.length < 5 || zip.length > 9) {
     console.error("Zip must be between 5 and 9 characters.");
     return res.status(401).send("Zip must be between 5 and 9 characters.");
   }
 
   const updateQuery = `
     UPDATE ClientInformation
-    SET Name = ${name}, Address1 = ${address1}, Address2 = ${address2}, City = ${city}, State = ${state}, Zip = ${zip}
+    SET Name = '${name}', Address1 = '${address1}', Address2 = '${address2}', City = '${city}', State = '${state}', Zip = '${zip}'
     WHERE ClientInformationId = ${clientId}
   `;
   db.query(updateQuery, (err, result) => {
