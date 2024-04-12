@@ -148,7 +148,19 @@ app.get("/fuelquote", (req, res) => {
     suggestedPrice: "3.14",
   };
 
-  res.status(200).send(hardcodedValues);
+  db.query(
+    `
+    SELECT *
+    FROM ClientInformation
+    WHERE ClientInformationID = ${req.session.req.session.ClientInformationID}
+    `, (err, result) => {
+      if (err) {
+        throw err;
+      }
+
+      res.status(200).send(result);
+    }
+  )
 });
 
 // Api for fuel quote post
@@ -158,28 +170,28 @@ app.post("/fuelquote", (req, res) => {
   // validate data
   // validate that gallons requested is numeric
   if (isNaN(data.gallonsRequested)) {
-    res.status(400).send("error gallons requested is not a number");
+    return res.status(400).send("error gallons requested is not a number");
   }
 
   // validate delivery address is not empty
   if (data.deliveryAddress.length === 0 || data.deliveryAddress === null) {
-    res.status(400).send("delivery address is empty or invalid");
+    return res.status(400).send("delivery address is empty or invalid");
   }
 
   // validate delivery date is not empty
   if (data.deliveryDate.length === 0 || data.deliveryDate === null) {
-    res.status(400).send("delivery date is empty or invalid");
+    return res.status(400).send("delivery date is empty or invalid");
   }
 
   // validate delivery date is valid
   const regex = /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
   if (!regex.test(data.deliveryDate)) {
-    res.status(400).send("invalid date format, date is not in yyyy-mm-dd form");
+    return res.status(400).send("invalid date format, date is not in yyyy-mm-dd form");
   }
 
   // validate suggested price per gallon is numeric
   if (isNaN(data.suggestedPrice)) {
-    res.status(400).send("error suggested price is not a number");
+    return res.status(400).send("error suggested price is not a number");
   }
 
   // Calculate cost
@@ -218,7 +230,7 @@ app.post("/fuelquote", (req, res) => {
   db.query(
     `
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
-    VALUES(2, ${data.gallonsRequested}, '${data.deliveryDate}', ${data.suggestedPrice});
+    VALUES(${req.session.req.session.ClientInformationID}, ${data.gallonsRequested}, '${data.deliveryDate}', ${data.suggestedPrice});
     `
   ),
     (err) => {
@@ -232,24 +244,13 @@ app.post("/fuelquote", (req, res) => {
 
 // Api for fuel history
 app.get("/fuelhistory", (req, res) => {
+  console.log(req.session.ClientInformationID);
   db.query(
-    `SELECT CI.*, Q.*
-    FROM (
-        SELECT *
-        FROM ClientInformation
-        WHERE ClientInformationID = 2
-    ) AS CI
-    LEFT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID
-
-    UNION
-
+    `
     SELECT CI.*, Q.*
-    FROM (
-        SELECT *
-        FROM ClientInformation
-        WHERE ClientInformationID = 2
-    ) AS CI
-    RIGHT JOIN Quote Q ON CI.ClientInformationID = Q.ClientInformationID;
+    FROM ClientInformation AS CI
+    INNER JOIN Quote AS Q ON CI.ClientInformationID = Q.ClientInformationID
+    WHERE CI.ClientInformationID = ${req.session.ClientInformationID};
     `,
     function (error, results) {
       if (error) throw error;

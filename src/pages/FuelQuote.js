@@ -5,16 +5,18 @@ import axios from 'axios'
 function FuelQuote() {
   // hooks
   const [totalPrice, setTotalPrice] = useState(0)
-  const [hardcodedData, setHardcodedData] = useState(null);
+  const [userData, setUserData] = useState(null);
   // constants
   const suggestedPrice = 3.14
   const clientAddress = '1900 Coco Drive. Houston, TX 77882'
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("asdfsadf trying fuel quote");
       try {
         const response = await axios.get('http://localhost:3000/fuelquote');
-        setHardcodedData(response.data);
+        console.log(response.data[0]);
+        setUserData(response.data[0]);
       } catch (error) {
         console.error('Error fetching data: ', error);
       }
@@ -27,15 +29,15 @@ function FuelQuote() {
   const submitFuelQuoteForm = (e) => {
     e.preventDefault();
 
-    const userData = {
+    const sentData = {
       gallonsRequested: e.target.gallons.value,
-      deliveryAddress: hardcodedData.deliveryAddress,
+      deliveryAddress: userData.Address1,
       deliveryDate: e.target.date.value,
-      suggestedPrice: hardcodedData.suggestedPrice,
+      suggestedPrice: suggestedPrice,
     }
 
     // api request for fuel quote form
-    axios.post('http://localhost:3000/fuelquote', userData).then(response => {
+    axios.post('http://localhost:3000/fuelquote', sentData).then(response => {
       console.log(response.data);
       setTotalPrice(response.data);
     }).catch(error => {
@@ -43,7 +45,7 @@ function FuelQuote() {
     })
   }
 
-  if(!hardcodedData) {
+  if(!userData) {
     return (<div>Loading...</div>);
   }
 
@@ -55,13 +57,13 @@ function FuelQuote() {
         <input type="number" name="gallons" />
         <br />
         <label>Delivery Address: </label>
-        <label>{hardcodedData.deliveryAddress}</label>
+        <label>{userData.Address1}</label>
         <br />
         <label>Delivery Date: </label>
         <input type="date" name="date"/>
         <br />
         <label>Suggested Price: </label>
-        <label>${hardcodedData.suggestedPrice} per gallon</label>
+        <label>${suggestedPrice} per gallon</label>
         <br />
         <button type="submit">Submit</button>
       </form>

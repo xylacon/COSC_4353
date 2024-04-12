@@ -7,6 +7,8 @@ import {
   Login,
   ClientProfile,
   ClientRegistration,
+  FuelHistory,
+  FuelQuote,
   Landing
 } from './pages'
 import {
@@ -46,6 +48,8 @@ function App() {
       {cookies.isLoggedIn ? (
         <Routes>
           <Route path="/client-profile" element={<ClientProfile />} />
+          <Route path="/fuel-quote" element={<FuelQuote />} />
+          <Route path="/fuel-history" element={<FuelHistory />} />
         </Routes>
       ) : (
         <Routes>
