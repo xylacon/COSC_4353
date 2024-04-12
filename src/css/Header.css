@@ -121,12 +121,11 @@
 }
 /* end Navigation */
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
 	.header-container {
 		justify-content: center;
 	}
 
-	/* Fixes menu keeping width in Safari */
 	.menu {
 		width: 0;
 	}
@@ -172,4 +171,4 @@
 		width: 100%;
 		padding: 10px 0;
 	}
-}
+} */

@@ -5,7 +5,7 @@ import company from "../assets/company_info.json"
 
 import "../css/Header.css"
 
-const Header = ({ isLoggedIn }) => {
+const Header = () => {
 	const [scrolled, setScrolled] = useState(false)
 
 	useEffect(() => {
@@ -20,7 +20,7 @@ const Header = ({ isLoggedIn }) => {
 	return (
 		<header className={scrolled ? "header scroll-shadow" : "header"}>
 			<div className="header-container">
-				<Menu isLoggedIn={isLoggedIn} />
+				<Menu />
 				<h1>{company.name}</h1>
 			</div>
 		</header>

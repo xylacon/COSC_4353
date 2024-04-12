@@ -1,9 +1,13 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
+import { useCookies } from "react-cookie"
+import { useNavigate } from "react-router-dom";
 
-function Menu({ isLoggedIn }) {
+function Menu() {
   const [checkBox, setCheckBox] = useState(false)
+	const [cookies, setCookie] = useCookies();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		function changeSize() { // Dynamically change menu size to window size
@@ -32,6 +36,11 @@ function Menu({ isLoggedIn }) {
 		document.documentElement.scrollTop = 0 // Scroll page to top when going to new page
 	}
 
+	function logOut() {
+		setCookie('isLoggedIn', 0)
+    navigate("/");
+	}
+
   lockScroll()
 
   return (
@@ -48,7 +57,7 @@ function Menu({ isLoggedIn }) {
 				<div className="menu-button-bottom"></div>
 			</label>
       <ul className="menu-items">
-				{isLoggedIn ? (
+				{cookies.isLoggedIn ? (
 					<ul className="menu-items">
 						<li onClick={handleClick}>
 							<NavLink to="/client-profile">Client Profile</NavLink>

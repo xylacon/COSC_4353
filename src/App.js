@@ -42,7 +42,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={cookies.isLoggedIn ? true : false} />
+      <Header />
       {cookies.isLoggedIn ? (
         <Routes>
           <Route path="/client-profile" element={<ClientProfile />} />

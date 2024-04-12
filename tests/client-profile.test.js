@@ -14,7 +14,7 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("Name cannot exceed 50 characters")
+		expect(response.text).toBe("Name cannot exceed 50 characters.")
 	})
 
 	it("should return 401 if address1 is greater than 100 characters", async () => {
@@ -29,7 +29,7 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("Address 1 cannot exceed 100 characters")
+		expect(response.text).toBe("Address 1 cannot exceed 100 characters.")
 	})
 
 	it("should return 401 if address2 is greater than 100 characters", async () => {
@@ -44,7 +44,7 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("Address 2 cannot exceed 100 characters")
+		expect(response.text).toBe("Address 2 cannot exceed 100 characters.")
 	})
 
 	it("should return 401 if city is greater than 100 characters", async () => {
@@ -59,7 +59,7 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("City cannot exceed 100 characters")
+		expect(response.text).toBe("City cannot exceed 100 characters.")
 	})
 
 	it("should return 401 if state is not given", async () => {
@@ -74,7 +74,7 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("State must be specified")
+		expect(response.text).toBe("State must be specified.")
 	})
 
 	it("should return 401 if zip is not between 5-9 characters", async () => {
@@ -89,7 +89,7 @@ describe("POST /client-profile", () => {
 				zip: '7700'
 			})
 		expect(response.status).toBe(401)
-		expect(response.text).toBe("Zip must be between 5-9 characters")
+		expect(response.text).toBe("Zip must be between 5-9 numbers.")
 	})
 
 	it("should return 200 if update is successful", async () => {
@@ -104,6 +104,6 @@ describe("POST /client-profile", () => {
 				zip: '77006'
 			})
 		expect(response.status).toBe(200)
-		expect(response.text).toBe("Update successful")
+		expect(response.text).toBe("Client information updated in database.")
 	})
 })
