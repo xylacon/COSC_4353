@@ -11,8 +11,8 @@ const generateSecretKey = () => {
 };
 
 function generateRandomClientId() {
-  const min = 1000000; // Minimum 7-digit number (inclusive)
-  const max = 9999999; // Maximum 7-digit number (inclusive)
+  const min = 1000000;
+  const max = 9999999;
   const clientId = Math.floor(Math.random() * (max - min + 1)) + min;
   return clientId;
 }
@@ -20,10 +20,10 @@ function generateRandomClientId() {
 // Configure express-session middleware
 app.use(
   session({
-    secret: generateSecretKey(), // Change this to a secure random key
+    secret: generateSecretKey(),
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set secure to true in production with HTTPS
+    cookie: { secure: false },
   })
 );
 
@@ -58,14 +58,11 @@ app.post("/client-registration", async (req, res) => {
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
 
-  // Insert into your database (assuming you have a UserCredentials table)
   const newUser = {
     email: email,
     password: hashedPassword,
     UserCredentialsID: generateRandomClientId(),
     ClientInformationID: generateRandomClientId(),
-
-    // Assuming you have a function to generate random client IDs
   };
 
   // Check if the user with the same email already exists

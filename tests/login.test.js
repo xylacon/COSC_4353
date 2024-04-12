@@ -18,7 +18,7 @@ describe("POST /login", () => {
       .send({ email: "nonexistent@example.com", password: "password123" });
 
     expect(response.status).toBe(401);
-    expect(response.text).toBe("User not found");
+    expect(response.text).toBe("User does not exist!");
   });
 
   it("should return 401 if incorrect password", async () => {
@@ -27,7 +27,7 @@ describe("POST /login", () => {
       .send({ email: "test@example.com", password: "wrongpassword" });
 
     expect(response.status).toBe(401);
-    expect(response.text).toBe("INCORRECT PASSWORD");
+    expect(response.text).toBe("Incorrect password, Please try again!");
   });
 
   it("should return 200 if login is successful", async () => {

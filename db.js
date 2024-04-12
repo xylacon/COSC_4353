@@ -17,9 +17,4 @@ connection.connect((err) => {
   console.log("Connected to MySQL database!");
 });
 
-// Check the connection state before exporting
-if (connection.state === "disconnected") {
-  console.error("MySQL connection is not established.");
-}
-
 module.exports = connection;
