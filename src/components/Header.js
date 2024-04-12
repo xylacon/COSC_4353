@@ -1,10 +1,11 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import Menu from "./Menu"
+import company from "../assets/company_info.json"
 
 import "../css/Header.css"
 
-const Header = () => {
+const Header = ({ isLoggedIn }) => {
 	const [scrolled, setScrolled] = useState(false)
 
 	useEffect(() => {
@@ -19,7 +20,8 @@ const Header = () => {
 	return (
 		<header className={scrolled ? "header scroll-shadow" : "header"}>
 			<div className="header-container">
-				<Menu />
+				<Menu isLoggedIn={isLoggedIn} />
+				<h1>{company.name}</h1>
 			</div>
 		</header>
 	)

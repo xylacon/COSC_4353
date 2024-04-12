@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 function ClientRegistration() {
   //hooks
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const [cookies, setCookie] = useCookies();
+  const navigate = useNavigate();
 
   //handler
   const handleSubmit = async (e) => {
@@ -20,6 +24,8 @@ function ClientRegistration() {
       );
 
       console.log(response.data);
+      setCookie('isLoggedIn', 1)
+      navigate("/client-profile");
     } catch (error) {
       console.error("Registration FAILED", error);
     }

@@ -1,11 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   //hooks
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cookies, setCookie] = useCookies();
+  const navigate = useNavigate();
 
   //handler
   const handleSubmit = async (e) => {
@@ -18,6 +22,10 @@ function Login() {
       });
 
       console.log(response.data);
+
+      // Create login cookie
+      setCookie('isLoggedIn', 1)
+      navigate("/client-profile");
     } catch (error) {
       console.error("FAILED", error);
     }

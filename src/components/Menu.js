@@ -2,7 +2,7 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 
-function Menu() {
+function Menu({ isLoggedIn }) {
   const [checkBox, setCheckBox] = useState(false)
 
 	useEffect(() => {
@@ -48,21 +48,25 @@ function Menu() {
 				<div className="menu-button-bottom"></div>
 			</label>
       <ul className="menu-items">
-        <li onClick={handleClick}>
-          <NavLink to="/">Login</NavLink>
-        </li>
-        <li onClick={handleClick}>
-          <NavLink to="/fuel-quote">Fuel Quote</NavLink>
-        </li>
-        <li onClick={handleClick}>
-          <NavLink to="/fuel-history">Fuel History</NavLink>
-        </li>
-        <li onClick={handleClick}>
-          <NavLink to="/client-profile">Client Profile</NavLink>
-        </li>
-        <li onClick={handleClick}>
-          <NavLink to="/client-registration">Client Registration</NavLink>
-        </li>
+				{isLoggedIn ? (
+					<ul className="menu-items">
+						<li onClick={handleClick}>
+							<NavLink to="/client-profile">Client Profile</NavLink>
+						</li>
+						<li onClick={handleClick}>
+							<NavLink to="/fuel-quote">Fuel Quote</NavLink>
+						</li>
+						<li onClick={handleClick}>
+							<NavLink to="/fuel-history">Fuel History</NavLink>
+						</li>
+					</ul>
+				) : (
+					<ul className="menu-items">
+						<li onClick={handleClick}>
+							<NavLink to="/login">Login</NavLink>
+						</li>
+					</ul>
+				)}
       </ul>
     </div>
   )
