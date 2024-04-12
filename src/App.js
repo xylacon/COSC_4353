@@ -1,22 +1,25 @@
 import React from 'react'
 import { useEffect } from 'react'
+import { useCookies } from "react-cookie"
 
 import { Routes, Route } from 'react-router-dom'
 import {
   Login,
-  FuelQuote,
   ClientProfile,
   ClientRegistration,
-  FuelHistory,
+  Landing
 } from './pages'
 import {
   Header,
   Footer
 } from './components'
+import company from "./assets/company_info.json"
 
 import './css/App.css'
 
 function App() {
+  const [cookies, setCookie] = useCookies();
+
   useEffect(() => {
     function changeTheme() {
       let dark = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -30,6 +33,7 @@ function App() {
       }
     }
 
+    document.title = company.name
     changeTheme()
     
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", changeTheme)
@@ -38,14 +42,18 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
-      <Routes>
-        <Route path="/fuel-quote" element={<FuelQuote />} />
-        <Route path="/client-profile" element={<ClientProfile />} />
-        <Route path="/client-registration" element={<ClientRegistration />} />
-        <Route path="/fuel-history" element={<FuelHistory />} />
-        <Route path="/" element={<Login />} />
-      </Routes>
+      <Header isLoggedIn={cookies.isLoggedIn ? true : false} />
+      {cookies.isLoggedIn ? (
+        <Routes>
+          <Route path="/client-profile" element={<ClientProfile />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/client-registration" element={<ClientRegistration />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Landing />} />
+        </Routes>
+      )}
       <Footer />
     </div>
   )
