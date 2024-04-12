@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { FaCheck, FaExclamation } from 'react-icons/fa'
 
@@ -27,6 +27,22 @@ function ClientProfile() {
     return <option value={state}>{state}</option> // FIX ME: EACH NEEDS UNIQUE KEY
   })
 
+  // Populate user data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/client-profile');
+        console.log(response.data);
+        // setFormData(response.data);
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, [])
+
   function onChange(event) {
     const { id, value } = event.target
     setFormData(oldFormData => ({
@@ -48,7 +64,7 @@ function ClientProfile() {
     }
 
     try {
-      const result = await axios.post(".../backend/server.js", payload)
+      const result = await axios.post("http://localhost:3000/client-profile", payload)
       console.log(result)
       setMessage({
 				class: 'success',

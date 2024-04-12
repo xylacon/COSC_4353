@@ -253,6 +253,7 @@ app.get("/fuelhistory", (req, res) => {
 app.get("/client-profile", (req, res) => {
   // Return hard-coded values for client
   const clientProfile = {
+    clientId: "12345",
     name: "John Doe",
     address1: "123 Main St",
     address2: "",
@@ -264,6 +265,49 @@ app.get("/client-profile", (req, res) => {
   res.status(200).send(clientProfile);
 });
 
-app.post("/client-profile", (req, res) => {});
+app.post("/client-profile", (req, res) => {
+  console.log(req.body);
+  const { clientId, name, address1, address2, city, state, zip } = req.body;
+
+  if (name.length < 1 || name.length > 50) {
+    console.error("Name must be between 1 and 50 characters.");
+    return res.status(401).send("Name must be between 1 and 50 characters.");
+  }
+  if (address1.length < 1 || address1.length > 100) {
+    console.error("Address 1 must be between 1 and 100 characters.");
+    return res.status(401).send("Address 1 must be between 1 and 100 characters.");
+  }
+  if (address2.length > 100) {
+    console.error("Address 2 must be between 1 and 100 characters.");
+    return res.status(401).send("Address 2 must be between 1 and 100 characters.");
+  }
+  if (city.length < 1 || city.length > 100) {
+    console.error("City must be between 1 and 100 characters.");
+    return res.status(401).send("City must be between 1 and 100 characters.");
+  }
+  if (state.length != 2) {
+    console.error("State must be 2 characters.");
+    return res.status(401).send("State must be 2 characters.");
+  }
+  if (zip < 5 || zip > 9) {
+    console.error("Zip must be between 5 and 9 characters.");
+    return res.status(401).send("Zip must be between 5 and 9 characters.");
+  }
+
+  const updateQuery = `
+    UPDATE ClientInformation
+    SET Name = ${name}, Address1 = ${address1}, Address2 = ${address2}, City = ${city}, State = ${state}, Zip = ${zip}
+    WHERE ClientInformationId = ${clientId}
+  `;
+  db.query(
+    updateQuery, (err, result) => {
+      if (err) {
+        console.error("Error updating information: ", err);
+        return res.status(500).send("Error updating information.");
+      }
+      console.log("Client information updated in database.");
+    }
+  )
+});
 
 module.exports = app;

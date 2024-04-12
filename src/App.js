@@ -43,8 +43,8 @@ function App() {
         <Route path="/fuel-quote" element={<FuelQuote />} />
         <Route path="/client-profile" element={<ClientProfile />} />
         <Route path="/client-registration" element={<ClientRegistration />} />
-        <Route path="/" element={<Login />} />
         <Route path="/fuel-history" element={<FuelHistory />} />
+        <Route path="/" element={<Login />} />
       </Routes>
       <Footer />
     </div>
