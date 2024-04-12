@@ -24,7 +24,7 @@ function ClientRegistration() {
       );
 
       console.log(response.data);
-      setCookie('isLoggedIn', 1)
+      setCookie('isLoggedIn', 1);
       navigate("/client-profile");
     } catch (error) {
       console.error("Registration FAILED", error);

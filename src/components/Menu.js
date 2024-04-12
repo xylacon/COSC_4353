@@ -68,6 +68,7 @@ function Menu() {
 						<li onClick={handleClick}>
 							<NavLink to="/fuel-history">Fuel History</NavLink>
 						</li>
+						<li onClick={logOut}>Log out</li>
 					</ul>
 				) : (
 					<ul className="menu-items">
