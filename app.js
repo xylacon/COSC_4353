@@ -304,15 +304,11 @@ app.post("/client-profile", (req, res) => {
   }
   if (address1.length < 1 || address1.length > 100) {
     console.error("Address 1 cannot exceed 100 characters.");
-    return res
-      .status(401)
-      .send("Address 1 cannot exceed 100 characters.");
+    return res.status(401).send("Address 1 cannot exceed 100 characters.");
   }
   if (address2.length > 100) {
     console.error("Address 2 cannot exceed 100 characters.");
-    return res
-      .status(401)
-      .send("Address 2 cannot exceed 100 characters.");
+    return res.status(401).send("Address 2 cannot exceed 100 characters.");
   }
   if (city.length < 1 || city.length > 100) {
     console.error("City cannot exceed 100 characters.");
@@ -339,6 +335,19 @@ app.post("/client-profile", (req, res) => {
     }
     console.log("Client information updated in database.");
     return res.status(200).send("Client information updated in database.");
+  });
+});
+
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      // Handle the error, maybe send an error response
+      return res.status(500).send("Error destroying session.");
+    }
+    // Session destroyed successfully
+    res.clearCookie("sessionID"); // Clear the session cookie
+    res.status(200).send("Logged out successfully.");
   });
 });
 
