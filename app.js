@@ -156,17 +156,11 @@ app.post("/login", (req, res) => {
 
 // Api for fuel quote get
 app.get("/fuelquote", (req, res) => {
-  //hardcoded values
-  const hardcodedValues = {
-    deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
-    suggestedPrice: "3.14",
-  };
-
   db.query(
     `
     SELECT *
     FROM ClientInformation
-    WHERE ClientInformationID = ${req.session.req.session.ClientInformationID}
+    WHERE ClientInformationID = ${req.session.ClientInformationID}
     `,
     (err, result) => {
       if (err) {
@@ -323,10 +317,12 @@ app.post("/client-profile", (req, res) => {
   }
 
   // Zip validation
-  if (!zip || zip.length < 5) {
+  if (!zip || zip.length < 1) {
     errors.push("Zip cannot be empty.");
+  } else if (zip.length < 5) {
+    errors.push("Zip must be at least 5 characters.");
   } else if (zip.length > 9) {
-    errors.push("Zip must be between 5-9 numbers.");
+    errors.push("Zip cannot exceed 9 characters.");
   }
 
   if (errors.length > 0) {
