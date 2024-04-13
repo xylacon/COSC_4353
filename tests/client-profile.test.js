@@ -1,7 +1,22 @@
+const session = require("supertest-session");
 const request = require("supertest");
+const db = require("../db");
 const app = require("../app");
 
 describe("POST /client-profile", () => {
+  beforeEach(function () {
+    testSession = session(app);
+  });
+
+  afterAll(() => {
+    db.end((err) => {
+      if (err) {
+        console.error("Error closing MySQL connection:", err);
+        return;
+      }
+    });
+  });
+
   it("should return 401 if name is greater than 50 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz",
@@ -83,7 +98,12 @@ describe("POST /client-profile", () => {
   });
 
   it("should return 200 if update is successful", async () => {
-    const response = await request(app).post("/client-profile").send({
+    await testSession
+      .post("/set-session")
+      .send({ ClientInformationID: 2 })
+      .expect(200);
+
+    const response = await testSession.post("/client-profile").send({
       name: "John Doe",
       address1: "123 Main St",
       address2: "",
