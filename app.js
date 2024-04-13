@@ -295,7 +295,7 @@ app.post("/client-profile", (req, res) => {
     return res.status(401).send("State must be specified.");
   }
   if (zip.length < 5 || zip.length > 9) {
-    console.error("Zip must be between 5 and 9 characters.");
+    console.error("Zip must be between 5-9 numbers.");
     return res.status(401).send("Zip must be between 5-9 numbers.");
   }
 
