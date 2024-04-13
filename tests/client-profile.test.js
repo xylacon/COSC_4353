@@ -21,6 +21,18 @@ describe("POST /client-profile", () => {
     });
   });
 
+	it("should return 401 if name is empty", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "",
+      address1: "123 Main St",
+      address2: "",
+      city: "Houston",
+      state: "TX",
+      zip: "77006",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("Name cannot be empty.");
+  });
   it("should return 401 if name is greater than 50 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz",
@@ -34,6 +46,18 @@ describe("POST /client-profile", () => {
     expect(response.text).toBe("Name cannot exceed 50 characters.");
   });
 
+	it("should return 401 if address1 is empty", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "John Doe",
+      address1: "",
+      address2: "",
+      city: "Houston",
+      state: "TX",
+      zip: "77006",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("Address 1 cannot be empty.");
+  });
   it("should return 401 if address1 is greater than 100 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "John Doe",
@@ -62,6 +86,18 @@ describe("POST /client-profile", () => {
     expect(response.text).toBe("Address 2 cannot exceed 100 characters.");
   });
 
+	it("should return 401 if city is empty", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "John Doe",
+      address1: "123 Main St",
+      address2: "",
+      city: "",
+      state: "TX",
+      zip: "77006",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("City cannot be empty.");
+  });
   it("should return 401 if city is greater than 100 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "John Doe",
@@ -87,7 +123,31 @@ describe("POST /client-profile", () => {
     expect(response.status).toBe(401);
     expect(response.text).toBe("State must be specified.");
   });
+	it("should return 401 if state not two letters", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "John Doe",
+      address1: "123 Main St",
+      address2: "",
+      city: "Houston",
+      state: "Texas",
+      zip: "77006",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("Invalid state format.");
+  });
 
+	it("should return 401 if zip is empty", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "John Doe",
+      address1: "123 Main St",
+      address2: "",
+      city: "Houston",
+      state: "TX",
+      zip: "",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("Zip cannot be empty.");
+  });
   it("should return 401 if zip is not between 5-9 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "John Doe",

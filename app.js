@@ -273,30 +273,51 @@ app.post("/client-profile", (req, res) => {
   console.log(req.body);
   clientId = req.session.ClientInformationID;
   const { name, address1, address2, city, state, zip } = req.body;
+  let errors = [];
 
-  if (name.length < 1 || name.length > 50) {
-    console.error("Name cannot exceed 50 characters.");
-    return res.status(401).send("Name cannot exceed 50 characters.");
+  // Name validation
+  if (!name || name.length < 1) {
+    errors.push("Name cannot be empty.");
+  } else if (name.length > 50) {
+    errors.push("Name cannot exceed 50 characters.");
   }
-  if (address1.length < 1 || address1.length > 100) {
-    console.error("Address 1 cannot exceed 100 characters.");
-    return res.status(401).send("Address 1 cannot exceed 100 characters.");
+
+  // Address1 validation
+  if (!address1 || address1.length < 1) {
+    errors.push("Address1 cannot be empty.");
+  } else if (address1.length > 100) {
+    errors.push("Address1 cannot exceed 100 characters.");
   }
+
+  // Address2 validation
   if (address2.length > 100) {
-    console.error("Address 2 cannot exceed 100 characters.");
-    return res.status(401).send("Address 2 cannot exceed 100 characters.");
+    errors.push("Address2 cannot exceed 100 characters.");
   }
-  if (city.length < 1 || city.length > 100) {
-    console.error("City cannot exceed 100 characters.");
-    return res.status(401).send("City cannot exceed 100 characters.");
+
+  // City validation
+  if (!city || city.length < 1) {
+    errors.push("City cannot be empty.");
+  } else if (city.length > 100) {
+    errors.push("City cannot exceed 100 characters.");
   }
-  if (state.length != 2) {
-    console.error("State must be specified.");
-    return res.status(401).send("State must be specified.");
+
+  // State validation
+  if (!state || state.length < 2) {
+    errors.push("State must be specified.");
+  } else if (state.length > 2) {
+    errors.push("Invalid state format.");
   }
-  if (zip.length < 5 || zip.length > 9) {
-    console.error("Zip must be between 5-9 numbers.");
-    return res.status(401).send("Zip must be between 5-9 numbers.");
+
+  // Zip validation
+  if (!zip || zip.length < 5) {
+    errors.push("Zip cannot be empty.");
+  } else if (zip.length > 9) {
+    errors.push("Zip must be between 5-9 numbers.");
+  }
+
+  if (errors.length > 0) {
+    console.error("Validation errors:", errors);
+    return res.status(401).send(errors.join("\n"));
   }
 
   const updateQuery = `
