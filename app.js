@@ -166,7 +166,7 @@ app.get("/fuelquote", (req, res) => {
     `
     SELECT *
     FROM ClientInformation
-    WHERE ClientInformationID = ${req.session.req.session.ClientInformationID}
+    WHERE ClientInformationID = ${req.session.ClientInformationID}
     `,
     (err, result) => {
       if (err) {

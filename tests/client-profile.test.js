@@ -56,7 +56,7 @@ describe("POST /client-profile", () => {
       zip: "77006",
     });
     expect(response.status).toBe(401);
-    expect(response.text).toBe("Address 1 cannot be empty.");
+    expect(response.text).toBe("Address1 cannot be empty.");
   });
   it("should return 401 if address1 is greater than 100 characters", async () => {
     const response = await request(app).post("/client-profile").send({
@@ -69,7 +69,7 @@ describe("POST /client-profile", () => {
       zip: "77006",
     });
     expect(response.status).toBe(401);
-    expect(response.text).toBe("Address 1 cannot exceed 100 characters.");
+    expect(response.text).toBe("Address1 cannot exceed 100 characters.");
   });
 
   it("should return 401 if address2 is greater than 100 characters", async () => {
@@ -83,7 +83,7 @@ describe("POST /client-profile", () => {
       zip: "77006",
     });
     expect(response.status).toBe(401);
-    expect(response.text).toBe("Address 2 cannot exceed 100 characters.");
+    expect(response.text).toBe("Address2 cannot exceed 100 characters.");
   });
 
 	it("should return 401 if city is empty", async () => {
