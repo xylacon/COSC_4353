@@ -199,34 +199,6 @@ app.post("/fuelquote", (req, res) => {
     2
   );
 
-  /*
-  db.query(
-    `
-    SELECT *
-    FROM ClientInformation
-    WHERE UserCredentialsID = ${req.session.UserCredentialsID}
-    `, (err, results) => {
-      if (err){
-        throw err;
-      }
-    
-      const clientInformationID = results.ClientInformationID;
-      
-      db.query(
-        `
-        INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
-        VALUES(${clientInformationID}, ${data.gallonsRequested}, ${data.deliveryDate}, ${data.suggestedPrice});
-        `
-      ), (err) => {
-        if (err) {
-          throw err;
-        }
-      }
-
-    }
-  )
-  */
-
   db.query(
     `
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
