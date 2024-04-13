@@ -153,14 +153,15 @@ app.get("/fuelquote", (req, res) => {
     SELECT *
     FROM ClientInformation
     WHERE ClientInformationID = ${req.session.req.session.ClientInformationID}
-    `, (err, result) => {
+    `,
+    (err, result) => {
       if (err) {
         throw err;
       }
 
       res.status(200).send(result);
     }
-  )
+  );
 });
 
 // Api for fuel quote post
@@ -186,7 +187,9 @@ app.post("/fuelquote", (req, res) => {
   // validate delivery date is valid
   const regex = /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
   if (!regex.test(data.deliveryDate)) {
-    return res.status(400).send("invalid date format, date is not in yyyy-mm-dd form");
+    return res
+      .status(400)
+      .send("invalid date format, date is not in yyyy-mm-dd form");
   }
 
   // validate suggested price per gallon is numeric
@@ -277,7 +280,7 @@ app.get("/client-profile", (req, res) => {
     }
     if (result.length < 1) {
       console.error("Client information not found for ID: ", clientId);
-      return res.status(404).send("Client profile not found")
+      return res.status(404).send("Client profile not found");
     }
 
     const clientInfo = result[0];
@@ -287,9 +290,9 @@ app.get("/client-profile", (req, res) => {
       address2: clientInfo.Address2,
       city: clientInfo.City,
       state: clientInfo.State,
-      zip: clientInfo.Zip
+      zip: clientInfo.Zip,
     };
-  
+
     res.status(200).send(clientProfile);
   });
 });
@@ -317,7 +320,7 @@ app.post("/client-profile", (req, res) => {
   }
   if (state.length != 2) {
     console.error("State must be specified.");
-    return res.status(401).send("State must be 2 characters.");
+    return res.status(401).send("State must be specified.");
   }
   if (zip.length < 5 || zip.length > 9) {
     console.error("Zip must be between 5 and 9 characters.");
