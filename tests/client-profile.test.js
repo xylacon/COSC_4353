@@ -3,6 +3,10 @@ const request = require("supertest");
 const db = require("../db");
 const app = require("../app");
 
+// describe("GET /client-profile", () => {
+	
+// })
+
 describe("POST /client-profile", () => {
   beforeEach(function () {
     testSession = session(app);
