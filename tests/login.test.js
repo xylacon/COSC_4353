@@ -1,8 +1,22 @@
 // login.test.js
+const session = require("supertest-session");
 const request = require("supertest");
+const db = require("../db");
 const app = require("../app");
 
 describe("POST /login", () => {
+  beforeEach(function () {
+    testSession = session(app);
+  });
+
+  afterAll(() => {
+    db.end((err) => {
+      if (err) {
+        console.error("Error closing MySQL connection:", err);
+        return;
+      }
+    });
+  });
   it("should return 401 if password length is less than 8 characters", async () => {
     const response = await request(app)
       .post("/login")
@@ -31,9 +45,13 @@ describe("POST /login", () => {
   });
 
   it("should return 200 if login is successful", async () => {
+    await testSession
+      .post("/set-session")
+      .send({ ClientInformationID: 22997252 })
+      .expect(200);
     const response = await request(app)
       .post("/login")
-      .send({ email: "test@example.com", password: "password123" });
+      .send({ email: "mohii@mohii.com", password: "mohi123456" });
 
     expect(response.status).toBe(200);
     expect(response.text).toBe("SUCCESS");
