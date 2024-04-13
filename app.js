@@ -156,17 +156,11 @@ app.post("/login", (req, res) => {
 
 // Api for fuel quote get
 app.get("/fuelquote", (req, res) => {
-  //hardcoded values
-  const hardcodedValues = {
-    deliveryAddress: "1900 Coco Drive. Houston, TX 77882",
-    suggestedPrice: "3.14",
-  };
-
   db.query(
     `
     SELECT *
     FROM ClientInformation
-    WHERE ClientInformationID = ${req.session.req.session.ClientInformationID}
+    WHERE ClientInformationID = ${req.session.ClientInformationID}
     `,
     (err, result) => {
       if (err) {
