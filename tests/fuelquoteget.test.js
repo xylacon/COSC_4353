@@ -1,10 +1,22 @@
-const request = require("supertest");
+const session = require("supertest-session");
 const app = require("../app")
 
-describe("GET /fuelquote", () => {
-  it("Should return a response used to prepopulate fields in fuel quote", async () => {
-    const response = await request(app).get("/fuelquote");
 
-    expect(response.statusCode).toBe(200);
+describe("GET /fuelhistory", () => {
+  beforeEach(function () {
+    testSession = session(app);
   });
-})
+
+  it("Should return a response used to prepopulate fields in fuel quote", async () => {
+      // Set the session variable
+      await testSession.post('/set-session')
+        .send({ ClientInformationID: 2 })
+        .expect(200);
+
+      // Now make the GET request
+      const response = await testSession.get("/fuelquote");
+
+      expect(response.statusCode).toBe(200);
+      // Add more assertions here based on the expected response body
+  }, 30000);
+});

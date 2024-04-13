@@ -355,4 +355,10 @@ app.post("/logout", (req, res) => {
   });
 });
 
+// FOR TESTING PURPOSES
+app.post('/set-session', (req, res) => {
+  req.session.ClientInformationID = req.body.ClientInformationID;
+  res.status(200).send('Session updated');
+});
+
 module.exports = app;
