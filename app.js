@@ -323,10 +323,12 @@ app.post("/client-profile", (req, res) => {
   }
 
   // Zip validation
-  if (!zip || zip.length < 5) {
+  if (!zip || zip.length < 1) {
     errors.push("Zip cannot be empty.");
+  } else if (zip.length < 5) {
+    errors.push("Zip must be at least 5 characters.");
   } else if (zip.length > 9) {
-    errors.push("Zip must be between 5-9 numbers.");
+    errors.push("Zip cannot exceed 9 characters.");
   }
 
   if (errors.length > 0) {

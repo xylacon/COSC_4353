@@ -148,7 +148,7 @@ describe("POST /client-profile", () => {
     expect(response.status).toBe(401);
     expect(response.text).toBe("Zip cannot be empty.");
   });
-  it("should return 401 if zip is not between 5-9 characters", async () => {
+	it("should return 401 if zip is not at least 5 characters", async () => {
     const response = await request(app).post("/client-profile").send({
       name: "John Doe",
       address1: "123 Main St",
@@ -158,7 +158,19 @@ describe("POST /client-profile", () => {
       zip: "7700",
     });
     expect(response.status).toBe(401);
-    expect(response.text).toBe("Zip must be between 5-9 numbers.");
+    expect(response.text).toBe("Zip must be at least 5 characters.");
+  });
+  it("should return 401 if zip is more than 9 characters", async () => {
+    const response = await request(app).post("/client-profile").send({
+      name: "John Doe",
+      address1: "123 Main St",
+      address2: "",
+      city: "Houston",
+      state: "TX",
+      zip: "1234567890",
+    });
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("Zip cannot exceed 9 characters.");
   });
 
   it("should return 200 if update is successful", async () => {
