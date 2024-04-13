@@ -1,6 +1,10 @@
 const request = require("supertest");
 const app = require("../app");
 
+// describe("GET /client-profile", () => {
+	
+// })
+
 describe("POST /client-profile", () => {
 	it("should return 401 if name is greater than 50 characters", async () => {
 		const response = await request(app)
@@ -10,7 +14,7 @@ describe("POST /client-profile", () => {
 				address1: '123 Main St',
 				address2: '',
 				city: 'Houston',
-				state: 'Texas',
+				state: 'TX',
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
@@ -25,7 +29,7 @@ describe("POST /client-profile", () => {
 				address1: 'abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz',
 				address2: '',
 				city: 'Houston',
-				state: 'Texas',
+				state: 'TX',
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
@@ -40,7 +44,7 @@ describe("POST /client-profile", () => {
 				address1: '123 Main St',
 				address2: 'abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz',
 				city: 'Houston',
-				state: 'Texas',
+				state: 'TX',
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
@@ -55,7 +59,7 @@ describe("POST /client-profile", () => {
 				address1: '123 Main St',
 				address2: '',
 				city: 'abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz',
-				state: 'Texas',
+				state: 'TX',
 				zip: '77006'
 			})
 		expect(response.status).toBe(401)
@@ -85,7 +89,7 @@ describe("POST /client-profile", () => {
 				address1: '123 Main St',
 				address2: '',
 				city: 'Houston',
-				state: 'Texas',
+				state: 'TX',
 				zip: '7700'
 			})
 		expect(response.status).toBe(401)
@@ -93,6 +97,11 @@ describe("POST /client-profile", () => {
 	})
 
 	it("should return 200 if update is successful", async () => {
+		testSession = session(app);
+		await testSession.post('/set-session')
+        .send({ ClientInformationID: 2 })
+        .expect(200);
+
 		const response = await request(app)
 			.post("/client-profile")
 			.send({
@@ -100,7 +109,7 @@ describe("POST /client-profile", () => {
 				address1: '123 Main St',
 				address2: '',
 				city: 'Houston',
-				state: 'Texas',
+				state: 'TX',
 				zip: '77006'
 			})
 		expect(response.status).toBe(200)
