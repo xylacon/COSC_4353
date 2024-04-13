@@ -135,8 +135,22 @@ app.post("/login", (req, res) => {
     if (!isMatch) {
       return res.status(401).send("Incorrect password, Please try again!");
     }
-    req.session.UserCredentialsID = foundUser.UserCredentialsID;
-    res.status(200).send("SUCCESS");
+
+    const clientInfoQuery = `SELECT ClientInformationID FROM ClientInformation WHERE UserCredentialsID = ?`;
+    db.query(
+      clientInfoQuery,
+      [foundUser.UserCredentialsID],
+      (clientErr, clientResult) => {
+        if (clientErr) {
+          console.error("Error retrieving client information:", clientErr);
+          return res.status(500).send("Error retrieving client information");
+        }
+
+        req.session.ClientInformationID = clientResult[0].ClientInformationID;
+
+        res.status(200).send(`SUCCESS`);
+      }
+    );
   });
 });
 
@@ -242,7 +256,7 @@ app.get("/client-profile", (req, res) => {
   const selectQuery = `
     SELECT Name, Address1, Address2, City, State, Zip
     FROM ClientInformation
-    WHERE ClientInformationId = ${clientId}
+    WHERE ClientInformationID = ${clientId}
   `;
 
   db.query(selectQuery, (err, result) => {
@@ -349,9 +363,9 @@ app.post("/logout", (req, res) => {
 });
 
 // FOR TESTING PURPOSES
-app.post('/set-session', (req, res) => {
+app.post("/set-session", (req, res) => {
   req.session.ClientInformationID = req.body.ClientInformationID;
-  res.status(200).send('Session updated');
+  res.status(200).send("Session updated");
 });
 
 module.exports = app;
