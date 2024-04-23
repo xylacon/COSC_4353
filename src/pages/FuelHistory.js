@@ -45,7 +45,7 @@ function FuelHistory() {
               <td>{entry.Address1}</td>
               <td>{entry.DeliveryDate.substring(0, 10)}</td>
               <td>{entry.SuggestedPrice}</td>
-              <td>{(entry.SuggestedPrice * entry.GallonsRequested)}</td>
+              <td>{(entry.SuggestedPrice * entry.GallonsRequested).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

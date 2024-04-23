@@ -172,9 +172,51 @@ app.get("/fuelquote", (req, res) => {
   );
 });
 
+// Api for fuel quote "Get Quote" button
+app.post("/fuelquote/getquote", (req, res) => {
+  const data = req.body;
+
+
+  // Calculate variable suggested price
+  const pricePerGallon = 1.5;
+  const locationFactor = data.state === 'TX' ? 0.02 : 0.04;
+
+  let numQuotes = 0;
+  db.query(
+    `
+    SELECT COUNT(*) 
+    FROM Quote
+    WHERE ClientInformationID = ${req.session.ClientInformationID}
+    `, (err, result) => {
+      if (err){
+        return res.status(500).send("Error adding quote");
+      }
+      numQuotes = result;
+    }
+  )
+  const historyFactor = numQuotes >= 1 ? 0.01 : 0;
+  const requestedFactor = data.gallonsRequested > 1000 ? 0.02 : 0.03;
+  const profitFactor = 0.1;
+
+  const margin = pricePerGallon * (locationFactor - historyFactor + requestedFactor + profitFactor);
+
+  const suggestedPrice = pricePerGallon + margin;
+
+  // Calculate cost
+  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(
+    2
+  );
+
+  const quoteInformation = {
+    clientSuggestedPrice: suggestedPrice,
+    clientTotalPrice: newQuotePrice
+  }
+
+  res.status(200).send(quoteInformation);
+})
+
 // Api for fuel quote post
 app.post("/fuelquote", (req, res) => {
-  console.log(req.body);
   const data = req.body;
   // validate data
   // validate that gallons requested is numeric
@@ -200,34 +242,53 @@ app.post("/fuelquote", (req, res) => {
       .send("invalid date format, date is not in yyyy-mm-dd form");
   }
 
-  // validate suggested price per gallon is numeric
-  if (isNaN(data.suggestedPrice)) {
-    return res.status(400).send("error suggested price is not a number");
-  }
+  // Calculate variable suggested price
+  const pricePerGallon = 1.5;
+  const locationFactor = data.state === 'TX' ? 0.02 : 0.04;
+
+  let numQuotes = 0;
+  db.query(
+    `
+    SELECT COUNT(*) 
+    FROM Quote
+    WHERE ClientInformationID = ${req.session.ClientInformationID}
+    `, (err, result) => {
+      if (err){
+        return res.status(500).send("Error adding quote");
+      }
+      numQuotes = result;
+    }
+  )
+  const historyFactor = numQuotes >= 1 ? 0.01 : 0;
+  const requestedFactor = data.gallonsRequested > 1000 ? 0.02 : 0.03;
+  const profitFactor = 0.1;
+
+  const margin = pricePerGallon * (locationFactor - historyFactor + requestedFactor + profitFactor);
+
+  const suggestedPrice = pricePerGallon + margin;
 
   // Calculate cost
-  const newQuotePrice = (data.gallonsRequested * data.suggestedPrice).toFixed(
+  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(
     2
   );
 
   db.query(
     `
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
-    VALUES(${req.session.req.session.ClientInformationID}, ${data.gallonsRequested}, '${data.deliveryDate}', ${data.suggestedPrice});
+    VALUES(${req.session.ClientInformationID}, ${data.gallonsRequested}, '${data.deliveryDate}', ${suggestedPrice});
     `
-  ),
+    ,
     (err) => {
       if (err) {
-        throw err;
+        return res.status(500).send("Error adding quote");
       }
-    };
+  });
 
   res.status(200).send(newQuotePrice);
 });
 
 // Api for fuel history
 app.get("/fuelhistory", (req, res) => {
-  console.log(req.session.ClientInformationID);
   db.query(
     `
     SELECT CI.*, Q.*
@@ -236,7 +297,9 @@ app.get("/fuelhistory", (req, res) => {
     WHERE CI.ClientInformationID = ${req.session.ClientInformationID};
     `,
     function (error, results) {
-      if (error) throw error;
+      if (error){
+        return res.status(500).send("Error retreiving quotes.");
+      };
       res.send(results);
     }
   );
