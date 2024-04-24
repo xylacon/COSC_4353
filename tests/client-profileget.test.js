@@ -23,7 +23,7 @@ describe("GET /client-profile", () => {
     // Set the session variable
     await testSession
       .post("/set-session")
-      .send({ ClientInformationID: 2997252 })
+      .send({ ClientInformationID: 1323346 })
       .expect(200);
 
     // Now make the GET request

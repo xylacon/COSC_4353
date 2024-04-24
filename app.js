@@ -163,8 +163,8 @@ app.get("/fuelquote", (req, res) => {
     WHERE ClientInformationID = ${req.session.ClientInformationID}
     `,
     (err, result) => {
-      if (err) {
-        throw err;
+      if (result.length === 0) {
+        return res.status(400).send("no quotes");
       }
 
       res.status(200).send(result);
@@ -176,10 +176,13 @@ app.get("/fuelquote", (req, res) => {
 app.post("/fuelquote/getquote", (req, res) => {
   const data = req.body;
 
+  if (isNaN(data.gallonsRequested)) {
+    return res.status(400).send("error gallons requested is not a number");
+  }
 
   // Calculate variable suggested price
   const pricePerGallon = 1.5;
-  const locationFactor = data.state === 'TX' ? 0.02 : 0.04;
+  const locationFactor = data.state === "TX" ? 0.02 : 0.04;
 
   let numQuotes = 0;
   db.query(
@@ -187,33 +190,34 @@ app.post("/fuelquote/getquote", (req, res) => {
     SELECT COUNT(*) 
     FROM Quote
     WHERE ClientInformationID = ${req.session.ClientInformationID}
-    `, (err, result) => {
-      if (err){
+    `,
+    (err, result) => {
+      if (err) {
         return res.status(500).send("Error adding quote");
       }
       numQuotes = result;
     }
-  )
+  );
   const historyFactor = numQuotes >= 1 ? 0.01 : 0;
   const requestedFactor = data.gallonsRequested > 1000 ? 0.02 : 0.03;
   const profitFactor = 0.1;
 
-  const margin = pricePerGallon * (locationFactor - historyFactor + requestedFactor + profitFactor);
+  const margin =
+    pricePerGallon *
+    (locationFactor - historyFactor + requestedFactor + profitFactor);
 
   const suggestedPrice = pricePerGallon + margin;
 
   // Calculate cost
-  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(
-    2
-  );
+  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(2);
 
   const quoteInformation = {
     clientSuggestedPrice: suggestedPrice,
-    clientTotalPrice: newQuotePrice
-  }
+    clientTotalPrice: newQuotePrice,
+  };
 
   res.status(200).send(quoteInformation);
-})
+});
 
 // Api for fuel quote post
 app.post("/fuelquote", (req, res) => {
@@ -244,7 +248,7 @@ app.post("/fuelquote", (req, res) => {
 
   // Calculate variable suggested price
   const pricePerGallon = 1.5;
-  const locationFactor = data.state === 'TX' ? 0.02 : 0.04;
+  const locationFactor = data.state === "TX" ? 0.02 : 0.04;
 
   let numQuotes = 0;
   db.query(
@@ -252,37 +256,38 @@ app.post("/fuelquote", (req, res) => {
     SELECT COUNT(*) 
     FROM Quote
     WHERE ClientInformationID = ${req.session.ClientInformationID}
-    `, (err, result) => {
-      if (err){
+    `,
+    (err, result) => {
+      if (err) {
         return res.status(500).send("Error adding quote");
       }
       numQuotes = result;
     }
-  )
+  );
   const historyFactor = numQuotes >= 1 ? 0.01 : 0;
   const requestedFactor = data.gallonsRequested > 1000 ? 0.02 : 0.03;
   const profitFactor = 0.1;
 
-  const margin = pricePerGallon * (locationFactor - historyFactor + requestedFactor + profitFactor);
+  const margin =
+    pricePerGallon *
+    (locationFactor - historyFactor + requestedFactor + profitFactor);
 
   const suggestedPrice = pricePerGallon + margin;
 
   // Calculate cost
-  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(
-    2
-  );
+  const newQuotePrice = (data.gallonsRequested * suggestedPrice).toFixed(2);
 
   db.query(
     `
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
     VALUES(${req.session.ClientInformationID}, ${data.gallonsRequested}, '${data.deliveryDate}', ${suggestedPrice});
-    `
-    ,
+    `,
     (err) => {
       if (err) {
         return res.status(500).send("Error adding quote");
       }
-  });
+    }
+  );
 
   res.status(200).send(newQuotePrice);
 });
@@ -297,9 +302,9 @@ app.get("/fuelhistory", (req, res) => {
     WHERE CI.ClientInformationID = ${req.session.ClientInformationID};
     `,
     function (error, results) {
-      if (error){
+      if (error) {
         return res.status(500).send("Error retreiving quotes.");
-      };
+      }
       res.send(results);
     }
   );
