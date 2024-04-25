@@ -47,11 +47,11 @@ describe("POST /login", () => {
   it("should return 200 if login is successful", async () => {
     await testSession
       .post("/set-session")
-      .send({ ClientInformationID: 22997252 })
+      .send({ ClientInformationID: 1323346 })
       .expect(200);
     const response = await request(app)
       .post("/login")
-      .send({ email: "mohii@mohii.com", password: "mohi123456" });
+      .send({ email: "xyz@email.com", password: "password123" });
 
     expect(response.status).toBe(200);
     expect(response.text).toBe("SUCCESS");
