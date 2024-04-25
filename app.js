@@ -68,11 +68,6 @@ app.post("/client-registration", async (req, res) => {
   // Check if the user with the same email already exists
   const checkQuery = `SELECT * FROM UserCredentials WHERE Username = ?`;
   db.query(checkQuery, [newUser.email], (err, result) => {
-    if (err) {
-      console.error("Error checking user existence:", err);
-      return res.status(500).send("Error checking user existence");
-    }
-
     if (result.length > 0) {
       // User with the same email already exists
       console.error("User with this email already exists");
@@ -88,11 +83,6 @@ app.post("/client-registration", async (req, res) => {
       insertQuery,
       [newUser.email, newUser.password, newUser.UserCredentialsID],
       (err, result) => {
-        if (err) {
-          console.error("Error inserting user:", err);
-          return res.status(500).send("Error inserting user data!");
-        }
-
         db.query(
           insertQuery2,
           [newUser.ClientInformationID, newUser.UserCredentialsID],
@@ -281,12 +271,7 @@ app.post("/fuelquote", (req, res) => {
     `
     INSERT INTO Quote (ClientInformationID, GallonsRequested, DeliveryDate, SuggestedPrice)
     VALUES(${req.session.ClientInformationID}, ${data.gallonsRequested}, '${data.deliveryDate}', ${suggestedPrice});
-    `,
-    (err) => {
-      if (err) {
-        return res.status(500).send("Error adding quote");
-      }
-    }
+    `
   );
 
   res.status(200).send(newQuotePrice);
@@ -302,9 +287,6 @@ app.get("/fuelhistory", (req, res) => {
     WHERE CI.ClientInformationID = ${req.session.ClientInformationID};
     `,
     function (error, results) {
-      if (error) {
-        return res.status(500).send("Error retreiving quotes.");
-      }
       res.send(results);
     }
   );
@@ -322,10 +304,6 @@ app.get("/client-profile", (req, res) => {
   `;
 
   db.query(selectQuery, (err, result) => {
-    if (err) {
-      console.error("Error retreiving information: ", err);
-      return res.status(500).send("Error retreiving information.");
-    }
     if (result.length < 1) {
       console.error("Client information not found for ID: ", clientId);
       return res.status(404).send("Client profile not found");
@@ -404,10 +382,6 @@ app.post("/client-profile", (req, res) => {
     WHERE ClientInformationId = ${clientId}
   `;
   db.query(updateQuery, (err, result) => {
-    if (err) {
-      console.error("Error updating information: ", err);
-      return res.status(500).send("Error updating information.");
-    }
     console.log("Client information updated in database.");
     return res.status(200).send("Client information updated in database.");
   });
