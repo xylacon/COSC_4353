@@ -33,7 +33,7 @@ function ClientProfile() {
       try {
         const response = await axios.get('http://localhost:3000/client-profile');
         console.log(response.data);
-        // setFormData(response.data);
+        setFormData(handleNull(response.data));
       }
       catch (error) {
         console.error(error);
@@ -42,6 +42,19 @@ function ClientProfile() {
 
     fetchData();
   }, [])
+
+  function handleNull(obj) {
+    const newObj = {};
+    for (const key in obj) {
+      if (obj[key] === null) {
+        newObj[key] = '';
+      }
+      else {
+        newObj[key] = obj[key];
+      }
+    }
+    return newObj;
+  }
 
   function handleChange(event) {
     const { id, value } = event.target
