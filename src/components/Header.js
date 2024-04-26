@@ -36,12 +36,16 @@ const Header = () => {
 		<header className={scrolled ? "header scroll-shadow" : "header"}>
 			<div className="header-container">
 				<h1><NavLink to="/">{company.name}</NavLink></h1>
-				<Menu />
 				{cookies.isLoggedIn === 1 && (
-					<ul className="menu-items">
-						<li onClick={logOut}><a>Log Out</a></li>
-					</ul>
+					<Menu />
 				)}
+				<ul className="menu-items">
+					{cookies.isLoggedIn === 1 ? (
+						<li onClick={logOut}><a>Log Out</a></li>
+					) : (
+						<li><NavLink to="/client-registration">Sign Up</NavLink></li>
+					)}
+				</ul>
 			</div>
 		</header>
 	)
