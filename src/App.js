@@ -8,8 +8,7 @@ import {
   ClientProfile,
   ClientRegistration,
   FuelHistory,
-  FuelQuote,
-  Landing
+  FuelQuote
 } from './pages'
 import {
   Header,
@@ -54,8 +53,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/client-registration" element={<ClientRegistration />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Login />} />
         </Routes>
       )}
       <Footer />

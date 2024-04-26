@@ -43,7 +43,7 @@ function ClientProfile() {
     fetchData();
   }, [])
 
-  function onChange(event) {
+  function handleChange(event) {
     const { id, value } = event.target
     setFormData(oldFormData => ({
       ...oldFormData,
@@ -59,9 +59,7 @@ function ClientProfile() {
   }
 
   async function postSubmission() {
-    const payload = {
-      ...formData
-    }
+    const payload = { ...formData }
 
     try {
       const result = await axios.post("http://localhost:3000/client-profile", payload)
@@ -91,7 +89,7 @@ function ClientProfile() {
             placeholder='Your Name'
             required
             maxLength="50"
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.name}
           />
         </div>
@@ -103,7 +101,7 @@ function ClientProfile() {
             placeholder='123 Place St'
             required
             maxLength="100"
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.address1}
           />
         </div>
@@ -114,7 +112,7 @@ function ClientProfile() {
             id="address2"
             placeholder='Ste 123'
             maxLength="100"
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.address2}
           />
         </div>
@@ -125,7 +123,7 @@ function ClientProfile() {
             id="city"
             placeholder='Houston'
             maxLength="100"
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.city}
           />
         </div>
@@ -135,7 +133,7 @@ function ClientProfile() {
             id="state"
             name="state"
             required
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.state}
           >
             {stateOptions}
@@ -149,7 +147,7 @@ function ClientProfile() {
             placeholder='12345'
             minLength="5"
             maxLength="9"
-            onChange={onChange}
+            onChange={handleChange}
             value={formData.zip}
           />
         </div>

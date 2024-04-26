@@ -10,6 +10,10 @@
 	background-color: var(--bg-header);
 	transition: box-shadow var(--trans-fast);
 }
+.header a {
+	color: var(--white);
+}
+
 .header-container {
 	width: 100%;
 	max-width: var(--max-width);
@@ -21,13 +25,20 @@
 	align-items: center;
 }
 
+.header-container h1 a {
+	padding: 0;
+}
+.header-container h1 a:hover {
+	background-color: rgba(255, 255, 255, 0);
+}
+
 .scroll-shadow {
 	box-shadow: 0 0 7px var(--shadow);
 }
 /* end Header */
 
 .menu {
-	order: 2;
+	/* order: 2; */
 
 	display: flex;
 	justify-content: center;

@@ -35,24 +35,23 @@ function ClientRegistration() {
     <main className="ClientRegistration">
       <form onSubmit={handleSubmit}>
         <h2>Client Registration</h2>
-        <div>
-          <label>Email: </label>
+        <div className="item">
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="youremail@email.com"
+            placeholder="Email"
             required
-          ></input>
-          <br />
-          <label>Password: </label>
+          />
+        </div>
+        <div className="item">
           <input
             value={password}
             onChange={(e) => setPass(e.target.value)}
             type="password"
-            placeholder="********"
+            placeholder="Password"
             required
-          ></input>
+          />
         </div>
         <button type="submit">Sign Up</button>
       </form>

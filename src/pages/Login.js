@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
   //hooks
@@ -35,24 +34,23 @@ function Login() {
     <main className="Login">
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
-        <div>
-          <label>Email: </label>
+        <div className="item">
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="youremail@email.com"
+            placeholder="Email"
             required
-          ></input>
-          <br />
-          <label>Password: </label>
+          />
+        </div>
+        <div className="item">
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
-            placeholder="********"
+            placeholder="Password"
             required
-          ></input>
+          />
         </div>
         <button type="submit">Log In</button>
       </form>
