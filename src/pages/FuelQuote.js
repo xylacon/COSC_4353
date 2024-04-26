@@ -9,6 +9,7 @@ function FuelQuote() {
   const [suggestedPrice, setSuggestedPrice] = useState(null);
   const [getQuoteBtn, setGetQuoteBtn] = useState(true);
   const formRef = useRef(null);
+  const [minDate, setMinDate] = useState('');
 
   // constants
   useEffect(() => {
@@ -20,6 +21,10 @@ function FuelQuote() {
         console.error('Error fetching data: ', error);
       }
     };
+
+    const today = new Date();
+    const formattedDate = today.toISOString().substring(0, 10);
+    setMinDate(formattedDate);
 
     fetchData();
   }, []);
@@ -86,7 +91,7 @@ function FuelQuote() {
         <label>{userData.Address1}</label>
         <br />
         <label>Delivery Date: </label>
-        <input type="date" name="date" onChange={enableGetQuote}/>
+        <input type="date" name="date" min={minDate} onChange={enableGetQuote}/>
         <br />
         <label>Suggested Price: </label>
         <label>{(suggestedPrice === null) ? "" : `$${suggestedPrice} per gallon`}</label>
