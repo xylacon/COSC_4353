@@ -57,7 +57,12 @@ function ClientProfile() {
   }
 
   function handleChange(event) {
-    const { id, value } = event.target
+    let { id, value } = event.target
+    
+    if (id === "name") {
+      value = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+
     setFormData(oldFormData => ({
       ...oldFormData,
       [id]: value
