@@ -7,7 +7,6 @@ function ClientRegistration() {
   //hooks
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
-  const [cookies, setCookie] = useCookies();
   const navigate = useNavigate();
 
   //handler
@@ -24,8 +23,7 @@ function ClientRegistration() {
       );
 
       console.log(response.data);
-      setCookie('isLoggedIn', 1);
-      navigate("/client-profile");
+      navigate("/");
     } catch (error) {
       console.error("Registration FAILED", error);
     }
