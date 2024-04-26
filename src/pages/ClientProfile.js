@@ -33,7 +33,7 @@ function ClientProfile() {
       try {
         const response = await axios.get('http://localhost:3000/client-profile');
         console.log(response.data);
-        setFormData(handleNull(response.data));
+        setFormData(parseData(response.data));
       }
       catch (error) {
         console.error(error);
@@ -43,7 +43,7 @@ function ClientProfile() {
     fetchData();
   }, [])
 
-  function handleNull(obj) {
+  function parseData(obj) {
     const newObj = {};
     for (const key in obj) {
       if (obj[key] === null) {
